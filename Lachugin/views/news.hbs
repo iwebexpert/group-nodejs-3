@@ -1,0 +1,16 @@
+<div>
+  <h3>News!</h3>
+  <div>
+    <form method="POST" action="/news">
+      <p>News Count:</p>
+      <input type="text" name="count" placeholder="Кол-во новостей">
+      <input type="submit" value="Сохранить" name="save">
+    </form>
+  </div>
+  <div>
+    {{#each news}}
+    <h4>{{this.title}}</h4>
+    <p>{{this.content}}</p>
+    {{/each}}
+  </div>
+</div>
