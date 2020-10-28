@@ -57,6 +57,7 @@ app.post('/tasks', async (req, res) => {
 })
 
 //TODO - CRUD
+app.create('/tasks/:id', async (req, res) => {})
 app.delete('/tasks/:id', async (req, res) => {})
 app.patch('/tasks/:id', async (req, res) => {})
 
