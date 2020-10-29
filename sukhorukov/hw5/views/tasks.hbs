@@ -1,0 +1,14 @@
+<div>
+  <ol>
+    {{#each tasks}}
+      <li>
+        <a href="/update/{{this._id}}">{{this.title}}</a>
+        <form method="post" action="/{{this._id}}?_method=DELETE">
+          <input type="hidden" name="_method" value="DELETE">
+          <input type="submit" value="X">
+        </form>
+      </li>
+    {{/each}} 
+  </ol>
+  <a href="/create">Создать задачу</a>   
+</div>

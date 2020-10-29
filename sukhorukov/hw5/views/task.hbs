@@ -1,0 +1,57 @@
+<div>
+  <form 
+    method="post"
+    {{#if create}}
+      action="/"
+    {{else}}
+      action="/{{task._id}}?_method=PUT"
+    {{/if}}>
+    <input type="hidden" name="_method" value="PUT">
+    <fieldset>
+      <legend>
+        {{#if create}}
+          Создание новой задачи
+        {{else}}
+          Редактирование ранее созданной задачи
+        {{/if}}
+      </legend>
+      <div class="form-control">
+        <label for="title">задача</label><br>
+        <input 
+          type="text"
+          id="title"
+          name="title"
+          value="{{task.title}}"
+          placeholder="наименование">
+      </div>
+
+      <div class="form-control">
+        <label for="priority">приоритет</label><br>
+        <select id="priority" name="priority">
+          {{#each options}}
+            {{{this}}}
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-control">
+        <input 
+          type="checkbox"
+          id="completed"
+          name="completed"
+          {{#unless create}}
+            {{#if task.completed}} checked {{/if}}
+          {{/unless}}>
+        <label for="completed">завершена</label>
+      </div>
+    </fieldset>
+    <input 
+      type="submit"
+      {{#if create}}
+        value="Создать"
+      {{else}}
+        value="Изменить"
+      {{/if}}>
+  </form>
+  <a href="/">Назад</button>
+</div>
