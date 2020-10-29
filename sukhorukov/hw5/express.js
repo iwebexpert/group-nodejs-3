@@ -8,7 +8,7 @@ const methodOverride = require('method-override')
 const taskModel = require('./models/task')
 
 /**
- * Функция создание разметки опций для выбора приоритета задачи (с выбранным элементом)
+ * Функция создания разметки опций для выбора приоритета задачи (с выбранным элементом)
  * Так как не удалось динамически отметить выбранный элемент в Handlebars понятным мне способом
  * 
  * @param {number} taskPriority - приоритет 0 - 2
@@ -63,7 +63,7 @@ app.get('/', async (req, res) => {
   res.render('tasks', {header, tasks})
 })
 
-// отобрадение формы для для запроса данных на создания задачи
+// отображение формы для для запроса данных на создания задачи
 app.get('/create', async (req, res) => {
   const options = getOptionsTemplate(1)
   const header = {title: 'Новая задача!'}
@@ -82,7 +82,7 @@ app.post('/', async (req, res) => {
   if (saved) res.redirect('/')
 })
 
-// отобрадение формы для запроса данных на изменение задачи (используется view.hbs создания задачи)
+// отображение формы для запроса данных на изменение задачи (используется view.hbs создания задачи)
 app.get('/update/:id', async (req, res) => {
   const { id } = req.params
 	const task = await taskModel.findById(id).lean()
