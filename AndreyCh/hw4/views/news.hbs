@@ -1,0 +1,17 @@
+<div>
+    <form method="POST" action="/config">
+        <label for="count">Кол-во новостей</label>
+        <input type="text" name="count" id="count" placeholder="кол-во" value="{{count}}">
+        <input type="submit" value="ОК">
+    </form>
+
+    {{#each news}}
+        <div class="news">
+            <a href="{{this.link}}"><h3>{{this.title}}</h3><a/>
+            {{#if this.img}}
+                <img src="{{this.img}}">
+            {{/if}}
+            <div>{{this.description}}</div>
+        </div>
+    {{/each}}
+</div>
