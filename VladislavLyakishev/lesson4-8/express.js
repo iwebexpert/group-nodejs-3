@@ -91,9 +91,25 @@ app.get('/', async (req, res) => {
     const tasks = await taskModel.find().sort('-created').lean()
     res.render('tasks', {tasks})
 })
+app.get('/:id', async (req, res) => {
+    const {id} = req.params
+    const tasks = await taskModel.find().sort('-created').lean()
+    const task = await taskModel.findById(id)
+    const value = task.title
+    res.render('tasks', {tasks, value, id})
+})
 app.post('/', async (req, res) => {
-    if(req.body.save && req.body.title){
+    if(req.body.save === 'Добавить' && req.body.title){
         const task = new taskModel(req.body)
+        const taskSaved = await task.save()
+    }
+    res.redirect('/')
+})
+app.post('/:id', async (req, res) => {
+    const {id} = req.params
+    if(req.body.save === 'Редактировать' && req.body.title){
+        const task = await taskModel.findOne({_id: id})
+        task.title = req.body.title
         const taskSaved = await task.save()
     }
     res.redirect('/')
