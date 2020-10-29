@@ -1,0 +1,26 @@
+<form method="POST" action="/news">
+  <div class="news-count">
+    <label for="newsCount">Количество новостей на странице</label>
+    <input
+      type="number"
+      name="newsCount"
+      {{#if newsCount}}
+        value="{{{newsCount}}}"
+      {{/if}}
+     />
+  </div>
+  <button type="submit">Отправить</button>
+
+</form>
+<div>
+  <hr>
+  <h1>Новости мира (rss лента яндекс.новостей)</h1>
+  <hr>
+  {{#if news}}
+  <ol>
+    {{#each news}}
+      <li>{{this}}</li>
+    {{/each}}
+  </ol>
+  {{/if}}
+</div>
