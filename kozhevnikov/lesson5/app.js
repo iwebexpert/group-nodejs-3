@@ -59,21 +59,34 @@ app.delete("/api/tasks/:id", function(req, res){
     });
 });
 
+// app.put("/api/tasks", jsonParser, function(req, res){
+//
+//     if(!req.body) return res.sendStatus(400);
+//     const id = req.body.id;
+//     const taskTitle = req.body.title;
+//     const taskCompleted = req.body.completed;
+//     const newTask = new Task({title: taskTitle, completed: taskCompleted});
+//     console.log(newTask);
+//
+//     Task.findOneAndUpdate({_id: id}, newTask, {new: true}, function(err, task){
+//         if(err) return console.log(err);
+//         res.send(task);
+//     });
+//     // Task.findOneAndUpdate({_id: id}, {title: taskTitle, completed: taskCompleted, {new: true},
+//     // if(err) return console.log(err);
+//     //     res.send(task);
+//     // });
+// });
+
 app.put("/api/tasks", jsonParser, function(req, res){
 
     if(!req.body) return res.sendStatus(400);
     const id = req.body.id;
     const taskTitle = req.body.title;
     const taskCompleted = req.body.completed;
-    const newTask = new Task({title: taskTitle, completed: taskCompleted});
-    console.log(newTask);
 
-    Task.findOneAndUpdate({_id: id}, newTask, {new: true}, function(err, task){
+    Task.findOneAndUpdate({_id: id}, {title: taskTitle, completed: taskCompleted}, {new: true}, function(err, task){
         if(err) return console.log(err);
         res.send(task);
     });
-    // Task.findOneAndUpdate({_id: id}, {title: taskTitle, completed: taskCompleted, {new: true},
-    // if(err) return console.log(err);
-    //     res.send(task);
-    // });
 });
