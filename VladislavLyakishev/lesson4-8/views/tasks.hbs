@@ -1,0 +1,20 @@
+<div class="container">
+    <div>
+        <form action="/" method="POST" class="tasks__add">
+            <input type="text" name="title" placeholder="Введите задачу">
+            <input type="submit" name="save" value="Добавить">
+        </form>
+    </div>
+    <div class="tasks">
+        {{#each tasks}}
+            <div class="task">
+                <input type="checkbox" value="">
+                <p >{{this.title}}</p>
+                <div class="tasks__control">
+                    <button>e</button>
+                    <button>x</button>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>

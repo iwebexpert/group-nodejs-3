@@ -7,6 +7,10 @@ const google = require('translate-google')
 const selectCount = require('./db/selectCount')
 const selectLang = require('./db/selectLang')
 const newsArr = require('./module/parser')
+//Config
+const mongoose = require('./config/mongodb')
+//Model
+const taskModel = require('./Model/Task')
 
 
 const app = express()
@@ -16,6 +20,7 @@ const app = express()
 app.use(express.static('public'))
 app.use(express.urlencoded({extended: false}))
 app.use(cookieParser())
+app.use(express.json())
 
 // Engine Express Handlebars
 app.engine('hbs', hbs({
@@ -23,11 +28,13 @@ app.engine('hbs', hbs({
     defaultLayout: 'default',
     layoutsDir: path.join( __dirname, 'views', 'layouts'),
     partialsDir: path.join( __dirname, 'views', 'partials'),
+    allowedProtoMethods: false
 }))
 // App Set
 app.set('view engine', 'hbs')
 
-app.get('/', (req, res) => {
+// NEWS
+app.get('/news', (req, res) => {
     const params = req.cookies.params ? req.cookies.params : {count: 5000000, lang: 'ru'}
     const date = (new Date).toLocaleDateString()
     let newsCount = []
@@ -70,12 +77,26 @@ app.get('/', (req, res) => {
     
 })
 
-app.post('/', (req, res) => {
+app.post('/news', (req, res) => {
     const params = req.body
     if (params.save === 'Сохранить'){
         res.cookie('params', params)
         res.redirect('/')
     }
+})
+
+//Tasks
+
+app.get('/', async (req, res) => {
+    const tasks = await taskModel.find().sort('-created').lean()
+    res.render('tasks', {tasks})
+})
+app.post('/', async (req, res) => {
+    if(req.body.save && req.body.title){
+        const task = new taskModel(req.body)
+        const taskSaved = await task.save()
+    }
+    res.redirect('/')
 })
 
 
