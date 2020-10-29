@@ -1,7 +1,7 @@
 const express = require('express')
 const hbs = require('express-handlebars')
 const path = require('path')
-const mongoose = require('mongoose')
+const mongoose = require('./config/mongodb')
 
 const tasksModel = require('./models/tasks')
 
