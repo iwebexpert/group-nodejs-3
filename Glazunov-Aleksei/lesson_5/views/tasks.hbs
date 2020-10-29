@@ -1,0 +1,39 @@
+<div>
+    <h2>Tasks</h2>
+    <input type="text" value="" class="newTask">
+    <input type="button" class="btnNewTask" value="Добавить" onclick="ChangeTask(event)">
+    <br>
+    {{#each tasks}}
+    <input type="text" class="titleTask" value="{{this.title}}" task-id = "{{this._id}}" onchange='ChangeTask(event)'>
+    <input type="checkbox" class="completeTask" task-id = "{{this._id}}" {{#if completed}}checked{{/if}} onchange='ChangeTask(event)'>
+    <input type="button" class="deleteTask" task-id = "{{this._id}}" value="Удалить" onclick="ChangeTask(event)">
+    <br>
+    {{/each}}
+</div>
+
+<script>
+
+    function ChangeTask(e) {
+        let el = e.target.className, body = {}, method;
+        if (el=='btnNewTask') {
+            body.title = document.querySelector('.newTask').value;
+            method = 'POST';
+        } else {
+            body.id = e.target.getAttribute('task-id');
+            method = 'PATCH';
+            if (e.target.className=="completeTask") body.completed = e.target.checked;
+            if (e.target.className=="titleTask") body.title = e.target.value;
+            if (e.target.className=="deleteTask") method = 'DELETE';
+        }
+        fetch('http://localhost:4000/tasks', {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(body)
+            })
+            .then(location.reload())
+
+    }
+
+</script>
