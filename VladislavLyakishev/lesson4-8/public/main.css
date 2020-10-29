@@ -5,6 +5,11 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+h1 {
+    text-align: center;
+}
+
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
@@ -12,4 +17,44 @@ body {
 
 .action-form {
     margin: 0 auto;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task p {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.task_complite {
+    text-decoration: line-through;
+}
+
+.tasks__add {
+    display: flex;
+    align-items: center;
+}
+
+.tasks__add input[type='text'] {
+    width: calc(var(--container-width) - 50px);
+}
+
+.tasks__control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    border: 1px solid black;
+    text-decoration: none;
 }
