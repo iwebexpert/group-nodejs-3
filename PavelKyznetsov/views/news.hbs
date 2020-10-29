@@ -1,0 +1,11 @@
+<div>
+    <h2>Список выборки</h2>
+    <ul class="wrapper">
+        {{#each limitedNews}}
+            <li>
+                <a href="{{this.url}}"><h4>{{this.header}}</h4><p>{{this.desc}}</p></a>
+
+            </li>
+        {{/each}}
+    </ul>
+</div>
