@@ -63,7 +63,7 @@ app.get('/', async (req, res) => {
   res.render('tasks', {header, tasks})
 })
 
-// отображение формы для для запроса данных на создания задачи
+// отображение формы для запроса данных на создания задачи
 app.get('/create', async (req, res) => {
   const options = getOptionsTemplate(1)
   const header = {title: 'Новая задача!'}
@@ -76,7 +76,6 @@ app.post('/', async (req, res) => {
   let { body } = req
   if (body.completed) body.completed = true
   const task = new taskModel(body)
-  console.log(`task: `, task, body)
   const saved = await task.save()
 
   if (saved) res.redirect('/')
