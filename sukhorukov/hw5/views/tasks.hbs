@@ -1,0 +1,20 @@
+<div>
+  {{#each tasks}}
+  <div class="task-wrapper">
+    <a class="task" href="/update/{{this._id}}">
+      {{this.title}}
+      <div class="description">{{this.description}}</div>
+      <div class="is-completed">
+        {{#if this.completed}}
+          Завершена
+        {{/if}}  
+      </div>
+    </a>
+
+    <form method="post" action="/{{this._id}}?_method=DELETE">
+      <input type="hidden" name="_method" value="DELETE">
+      <input class="del-btn" type="submit" value="X">
+    </form> 
+  </div>
+  {{/each}}  
+</div>
