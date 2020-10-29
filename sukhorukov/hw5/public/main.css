@@ -1,25 +1,94 @@
+.container {
+	width: 75vw;
+	height: 97vh;
+	margin: 0 auto;
+}
+
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+	align-items: baseline;
 }
 
 .header-link {
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    color: rgb(25, 129, 121)
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(25, 129, 121);
 }
 
 .header-link:hover {
-    color: red
+  color: red;
 }
 
 .header-link:active {
-    color:blueviolet
+  color: blueviolet;
 }
 
-.form-control {
-    margin-top: 20px;
+.task-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+}
+
+.task {
+	flex-grow: 1;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px 0;
+	margin-right: 15px;
+	text-decoration: none;
+	font-size: 1.1em;
+	font-weight: 600;
+	color: rgb(94, 94, 94)
+}
+
+.task:hover {
+	box-shadow: 0 0 3px rgba(0,0,0,0.5)
+}
+
+.description {
+	font-size: 0.75em;
+	color: rgb(116, 114, 114)
+}
+
+.is-completed {
+	font-size: 0.75em;
+	color: rgb(35, 138, 15);
+	margin-top: 15px;
+}
+
+.task-field-set {
+	padding: 0 20px;
+	margin: 25px 0;
+}
+
+.del-btn {
+	border-radius: 50%;
+	font-weight: 600;
+	padding: 4px 10px;
+	color: rgb(179, 84, 84)
+}
+
+.form-label {
+	margin-left: 5px;
+  font-size: 0.8em;
+	font-weight: 600;
+	color: rgb(73, 73, 73)
+}
+
+.form-field {
+	margin: 20px 0;
+}
+
+.form-task-description {
+	width: 45%;
+	padding: 5px;
+}
+
+.completed {
+	display: flex;
+	align-items: center;
 }

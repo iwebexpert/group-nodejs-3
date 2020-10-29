@@ -7,6 +7,10 @@ const taskSchema = new Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        default: "Подробности отсутствуют",
+    },
     completed: {
         type: Boolean,
         default: false,

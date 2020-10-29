@@ -7,7 +7,7 @@
       action="/{{task._id}}?_method=PUT"
     {{/if}}>
     <input type="hidden" name="_method" value="PUT">
-    <fieldset>
+    <fieldset class="task-field-set">
       <legend>
         {{#if create}}
           Создание новой задачи
@@ -15,18 +15,29 @@
           Редактирование ранее созданной задачи
         {{/if}}
       </legend>
-      <div class="form-control">
-        <label for="title">Задача</label><br>
+
+      <div class="form-field">  
+        <div><label class="form-label" for="title">Задача</label></div>
         <input 
           type="text"
           id="title"
           name="title"
           value="{{task.title}}"
-          placeholder="наименование">
+          placeholder="наименование"
+          style="width: 45%">
       </div>
 
-      <div class="form-control">
-        <label for="priority">Приоритет</label><br>
+      <div class="form-field">  
+        <div><label class="form-label" for="description">Подробности</label></div>
+        <textarea
+          class="form-task-description"  
+          id="description"
+          name="description"
+          placeholder="подробное описание задачи">{{task.description}}</textarea>
+      </div>
+
+      <div class="form-field">
+        <div><label class="form-label" for="priority">Приоритет</label></div>
         <select id="priority" name="priority">
           {{#each options}}
             {{{this}}}
@@ -34,7 +45,7 @@
         </select>
       </div>
 
-      <div class="form-control">
+      <div class="completed form-field">
         <input 
           type="checkbox"
           id="completed"
@@ -42,9 +53,10 @@
           {{#unless create}}
             {{#if task.completed}} checked {{/if}}
           {{/unless}}>
-        <label for="completed">Завершена</label>
+        <label class="form-label" for="completed">Завершена</label>
       </div>
     </fieldset>
+    
     <input 
       type="submit"
       {{#if create}}
