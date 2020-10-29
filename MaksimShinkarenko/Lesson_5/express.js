@@ -1,6 +1,5 @@
 const express = require('express')
 const hbs = require('express-handlebars')
-const cookieParser = require('cookie-parser')
 const path = require('path')
 const mongoose = require('mongoose')
 
@@ -16,7 +15,6 @@ mongoose.connect('mongodb://localhost:27017/tasks', {
 
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
-app.use(cookieParser())
 app.use(express.static('public'))
 
 app.engine('hbs', hbs({
