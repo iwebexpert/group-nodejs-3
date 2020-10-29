@@ -69,7 +69,6 @@ const addTask = async (body) => {
   if (body.hasOwnProperty('_id')) {
     delete body._id
   }
-  console.log(body)
   const task = new taskModel(body)
   await task.save()
 }
