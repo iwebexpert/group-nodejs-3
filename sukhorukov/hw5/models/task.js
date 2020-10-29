@@ -5,15 +5,15 @@ const Schema = mongoose.Schema
 const taskSchema = new Schema({
     title: {
         type: String,
-        required: true,
+        required: true
     },
     description: {
         type: String,
-        default: "Подробности отсутствуют",
+        default: "Подробности отсутствуют"
     },
     completed: {
         type: Boolean,
-        default: false,
+        default: false
     },
     priority: {
         type:Number,

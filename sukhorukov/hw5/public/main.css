@@ -18,18 +18,13 @@
 }
 
 .header-link:hover {
-  color: red;
-}
-
-.header-link:active {
-  color: blueviolet;
+  color: rgb(250, 0, 0);
 }
 
 .task-wrapper {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-
 }
 
 .task {
