@@ -42,3 +42,19 @@ h1 {
 .tasks__add input[type='text'] {
     width: calc(var(--container-width) - 50px);
 }
+
+.tasks__control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    border: 1px solid black;
+    text-decoration: none;
+}
