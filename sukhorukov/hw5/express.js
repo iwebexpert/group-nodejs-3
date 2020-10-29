@@ -7,7 +7,6 @@ const methodOverride = require('method-override')
 
 const taskModel = require('./models/task')
 
-
 /**
  * Функция создание разметки опций выбора приоритета задачи с выбранным элементом
  * Не удалось динамически отметить выбранный элемент в Handlebars понятным мне способом
@@ -24,7 +23,7 @@ const getOptionsTemplate = taskPriority => {
 	let option = options[taskPriority]
 	options[taskPriority] = `${option.substr(0, 7)} selected${option.substr(7)}`
 
-	return options
+	return options.reverse() // для более правильного отображения выпадающего списка
 } 
 
 const app = express()
@@ -53,16 +52,26 @@ app.engine(
 
 app.set('view engine', 'hbs')
 
+// вывод списка, имеющихся в базе данных, задач
 app.get('/', async (req, res) => {
   const tasks = await taskModel.find().lean()
-  res.render('tasks', { header: 'Список задач', tasks })
+  const header = {
+    title: 'Список задач',
+    isCreateLink: true
+  }
+
+  res.render('tasks', {header, tasks})
 })
 
+// отобрадение формы для для запроса данных на создания задачи
 app.get('/create', async (req, res) => {
-	const options = getOptionsTemplate(1)
-  res.render('task', { header: `Новая задача!`, options, create: true})
+  const options = getOptionsTemplate(1)
+  const header = {title: 'Новая задача!'}
+
+  res.render('task', {header, options, create: true})
 })
 
+// создание новой задачи в базе данных
 app.post('/', async (req, res) => {
   let { body } = req
   if (body.completed) body.completed = true
@@ -73,27 +82,36 @@ app.post('/', async (req, res) => {
   if (saved) res.redirect('/')
 })
 
+// отобрадение формы для запроса данных на изменение задачи (используется view.hbs создания задачи)
 app.get('/update/:id', async (req, res) => {
   const { id } = req.params
 	const task = await taskModel.findById(id).lean()
-	const options = getOptionsTemplate(task.priority)
+  const options = getOptionsTemplate(task.priority)
+  const header = {title: `Редактирование задачи: "${task.title}"`}
 		
-  res.render('task', { header: `Редактирование задачи: "${task.title}"`, options, task })
+  res.render('task', {header, options, task})
 })
 
-// обновляются все поля сущности - поэтому не patch
+// обновление старой задачи в базе данных
+// обновляются все поля сущности - поэтому, подумал, что не patch
 app.put('/:id', async (req, res) => {
 	const { id } = req.params
 	let { body } = req
-  if (body.completed) body.completed = true
-	const updated = await taskModel.findByIdAndUpdate(id, body).lean()
-	console.log(`updated: `, updated)
+  if (body.completed) {
+		body.completed = true
+	} else {
+		body.completed = false
+	}
+  const updated = await taskModel.findByIdAndUpdate(id, body).lean()
+  
   if (updated) res.redirect('/')
 })
 
+// удаление задачи из базы данных
 app.delete('/:id', async (req, res) => {
   const { id } = req.params
   const deleted = await taskModel.findByIdAndDelete(id)
+
   if (deleted) res.redirect('/')
 })
 
