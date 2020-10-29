@@ -18,7 +18,7 @@ mongoose.connect("mongodb://localhost:27017/tasks", { useNewUrlParser: true }, f
 
 app.get("/api/tasks", function(req, res){
 
-    Task.find({}, function(err, tasks){ладно
+    Task.find({}, function(err, tasks){
 
         if(err) return console.log(err);
         res.send(tasks)
