@@ -1,0 +1,8 @@
+<div>
+    <h2>News</h2>
+    <ul>
+        {{#each news}}
+            <li><a href="config/news/{{@key}}">{{this.newsTitle}}</a></li>
+        {{/each}}
+    </ul>
+</div>
