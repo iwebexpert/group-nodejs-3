@@ -1,0 +1,83 @@
+<div class="container">
+  <button type="button" class="mb-4 btn btn-primary btn-short" data-toggle="modal" data-target="#addTaskModal" id="add">
+    +
+  </button>
+
+  <div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="POST" action="/task">
+          <div class="modal-header">
+            <h5 class="modal-title">New Task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="_id" id="_id">
+            <input type="text" class="form-control" placeholder="Title" name="title" id="title">
+            <div class="d-flex mt-2 flex-row align-items-center">
+              Type
+              <select class="ml-2 custom-select" name="type" id="type">
+                <option value="1">Home</option>
+                <option value="2">Work</option>
+                <option value="3">Study</option>
+              </select>
+            </div>
+            <div class="d-flex mt-2 flex-row align-items-center">
+              Is active <input type="checkbox" class="ml-2" name="isActive" id="isActive">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Ok</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {{#each tasks}}
+    <div class="alert {{task-color this.type this.isActive}} d-flex justify-content-between align-items-center" role="alert">
+      <span>{{this.title}}</span>
+      <div class="d-flex flex-row align-items-center">
+        <span>{{task-type-name this.type this.isActive}}</span>
+        <button type="button" class="mr-2 ml-2 btn btn-primary btn-short" data-task="{{stringify this}}" id="update">
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+          </svg>
+        </button>
+        <form method="POST" action="/task/{{this._id}}">
+          <button type="submit" class="btn btn-primary btn-short">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  {{/each}}
+
+  <script>
+    window.addEventListener('click', (event) => {
+      const buttonUpdate = event.path.find(e => e.id  === 'update');
+      const buttonAdd = event.path.find(e => e.id  === 'add');
+      if (buttonUpdate) {
+        const task = JSON.parse(buttonUpdate.dataset.task);
+        $('#addTaskModal').modal('show');
+        document.querySelector('#_id').value = task._id;
+        document.querySelector('#title').value = task.title;
+        document.querySelector('#type').value = task.type;
+        if (task.isActive) {
+          document.querySelector('#isActive').checked = true;
+        }
+      } else if (buttonAdd) {
+        document.querySelector('#_id').value = null;
+        document.querySelector('#title').value = null;
+        document.querySelector('#type').value = 1;
+        document.querySelector('#isActive').checked = false;
+      }
+    })
+  </script>
+</div>
