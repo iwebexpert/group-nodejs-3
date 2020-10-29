@@ -78,7 +78,7 @@ app.post('/', async (req, res) => {
   const task = new taskModel(body)
   const saved = await task.save()
 
-  if (saved) res.redirect('/')
+  res.redirect('/')
 })
 
 // отображение формы для запроса данных на изменение задачи (используется view.hbs создания задачи)
@@ -103,7 +103,7 @@ app.put('/:id', async (req, res) => {
 	}
   const updated = await taskModel.findByIdAndUpdate(id, body).lean()
   
-  if (updated) res.redirect('/')
+  res.redirect('/')
 })
 
 // удаление задачи из базы данных
@@ -111,7 +111,7 @@ app.delete('/:id', async (req, res) => {
   const { id } = req.params
   const deleted = await taskModel.findByIdAndDelete(id)
 
-  if (deleted) res.redirect('/')
+  res.redirect('/')
 })
 
 app.get('*', (req, res) => {
