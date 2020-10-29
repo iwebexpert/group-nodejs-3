@@ -40,8 +40,8 @@ app.post("/api/tasks", jsonParser, function (req, res) {
     if(!req.body) return res.sendStatus(400);
 
     const taskTitle = req.body.title;
-    const taskComleted = req.body.completed;
-    const task = new Task({title: taskTitle, completed: taskComleted});
+    const taskCompleted = req.body.completed;
+    const task = new Task({title: taskTitle, completed: taskCompleted});
 
     task.save(function(err){
         if(err) return console.log(err);
@@ -64,12 +64,16 @@ app.put("/api/tasks", jsonParser, function(req, res){
     if(!req.body) return res.sendStatus(400);
     const id = req.body.id;
     const taskTitle = req.body.title;
-    const taskComleted = req.body.completed;
-    const newTask = new Task({title: taskTitle, completed: taskComleted});
+    const taskCompleted = req.body.completed;
+    const newTask = new Task({title: taskTitle, completed: taskCompleted});
     console.log(newTask);
 
     Task.findOneAndUpdate({_id: id}, newTask, {new: true}, function(err, task){
         if(err) return console.log(err);
         res.send(task);
     });
+    // Task.findOneAndUpdate({_id: id}, {title: taskTitle, completed: taskCompleted, {new: true},
+    // if(err) return console.log(err);
+    //     res.send(task);
+    // });
 });
