@@ -7,7 +7,7 @@
     </div>
     <div class="tasks">
         {{#each tasks}}
-            <div class="task">
+            <div class="task" id="{{this._id}}">
                 <input type="checkbox" {{#if this.complited}} checked {{/if}} class="task_checked" data-id="{{this._id}}">
                 <p class="{{#if this.complited}} task_complite {{/if}}">{{this.title}}</p>
                 <div class="tasks__control">
@@ -30,7 +30,9 @@
             }).then(
                 (response) => {
                     if (response.status === 200){
-                        location.reload()
+                        //location.reload()
+                        const task = document.getElementById(event.target.getAttribute('data-id'))
+                        document.querySelector('.tasks').removeChild(task)
                     }
                 }
             );
