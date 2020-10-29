@@ -101,6 +101,14 @@ app.post('/', async (req, res) => {
 app.delete('/:id', async (req, res) => {
     const {id} = req.params
     await taskModel.deleteOne({_id: id})
+    res.sendStatus(200)
+})
+app.patch('/:id', async (req, res) => {
+    const {id} = req.params
+    const task = await taskModel.findOne({_id: id})
+    task.complited = !task.complited
+    const taskSaved = await task.save()
+    res.sendStatus(200)
 })
 
 
