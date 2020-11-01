@@ -1,0 +1,83 @@
+<div>
+	{{#if error}}
+		<b>{{error}}</b>
+	{{/if}}
+
+  <form 
+    method="post"
+    {{#if isRegForm}}
+      action="/users/register"
+    {{else}}
+      action="/users/auth"
+    {{/if}}>
+
+    <fieldset class="task-field-set">
+      <legend>
+        {{#if isRegForm}}
+          Введите данные для создания пользователя
+        {{else}}
+          Введите данные для входа
+        {{/if}}
+      </legend>
+
+			{{#if isRegForm}}
+				<div class="form-field">  
+					<div><label class="form-label" for="firstName">Имя</label></div>
+					<input 
+						required
+						type="text"
+						id="firstName"
+						name="firstName"
+						placeholder="Имя пользователя"
+						style="width: 100%">
+      	</div>
+			{{/if}}
+
+      <div class="form-field">  
+        <div><label class="form-label" for="title">Email</label></div>
+        <input 
+          required
+          type="email"
+          id="email"
+          name="email"
+          placeholder="email"
+          style="width: 100%">
+      </div>
+
+      <div class="inline">
+				<div class="form-field">  
+					<div><label class="form-label" for="password">Пароль</label></div>
+					<input
+						required
+						type="password"
+						id="password"
+						name="password"
+						placeholder="Пароль"
+						style="width: 100%">
+				</div>
+
+				{{#if isRegForm}}
+					<div class="form-field">
+						<div><label class="form-label" for="repassword">Повторить пароль</label></div>
+							<input
+								required
+								type="password"
+								id="repassword"
+								name="repassword"
+								placeholder="Повторить пароль"
+								style="width: 100%">
+						</div>
+					</div>
+				{{/if}}
+			</div>
+    </fieldset>
+    
+    <input 
+      type="submit"
+      {{#if isRegForm}}
+        value="Зарегистрироваться"
+      {{else}}
+        value="Авторизоваться"
+      {{/if}}>
+  </form>
+</div>
