@@ -86,7 +86,7 @@ app.get('/users/register', (req, res) => {
     link: [
       {
         href: '/users/auth',
-        title: 'Авторизация',
+        title: 'У меня есть аккаунт',
       },
     ],
   }
@@ -115,7 +115,7 @@ app.get('/users/auth', (req, res) => {
     link: [
       {
         href: '/users/register',
-        title: 'Регистрация',
+        title: 'У меня нет аккаунта',
       },
     ],
   }

@@ -68,6 +68,12 @@
 	color: rgb(179, 84, 84)
 }
 
+.legend {
+	font-size: 0.9em;
+	font-weight: 600;
+	color: rgb(134, 134, 134);
+}
+
 .form-label {
 	margin-left: 5px;
   font-size: 0.8em;
