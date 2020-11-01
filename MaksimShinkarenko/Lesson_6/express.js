@@ -24,16 +24,16 @@ app.engine('hbs', hbs({
   partialsDir: path.join(__dirname, 'views', 'partials'),
   helpers: {
     switch: function (value, options) {
-      this.switch_value = value;
-      return options.fn(this);
+      this.switch_value = value
+      return options.fn(this)
     },
     case: function (value, options) {
       if (value === this.switch_value) {
-        return options.fn(this);
+        return options.fn(this)
       }
     },
     ifEquals: function (arg1, arg2, options) {
-      return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+      return (arg1 === arg2) ? options.fn(this) : options.inverse(this)
     }
   }
 }))
