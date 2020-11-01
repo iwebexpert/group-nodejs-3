@@ -40,7 +40,8 @@ module.exports = {
         failureRedirect: '/auth?error=1',
     }),
     mustBeAuthenticated: (req, res, next) => {
-        if(req.user){
+        // console.log(req.originalUrl)
+        if(req.user || req.originalUrl === '/auth'){
             next()
         } else {
             res.redirect('/auth')

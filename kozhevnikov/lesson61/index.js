@@ -33,7 +33,7 @@ app.use(session({
 app.use(passport.initialize)
 app.use(passport.session)
 
-app.use('/tasks', passport.mustBeAuthenticated)
+app.use('/', passport.mustBeAuthenticated)
 
 app.use(taskRoutes)
 
