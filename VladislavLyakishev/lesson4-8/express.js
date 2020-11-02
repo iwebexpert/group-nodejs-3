@@ -11,6 +11,12 @@ const newsArr = require('./module/parser')
 const mongoose = require('./config/mongodb')
 //Model
 const taskModel = require('./Model/Task')
+const userModel = require('./Model/User')
+//Auth
+const passport = require('./auth')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+
 
 
 const app = express()
@@ -32,6 +38,23 @@ app.engine('hbs', hbs({
 }))
 // App Set
 app.set('view engine', 'hbs')
+
+//Session
+app.use(session(
+    {
+        resave: true,
+        saveUninitialized: false,
+        secret: '1234asvgadafara4wqeqedasf314eefdasf2',
+        store: new MongoStore({mongooseConnection: mongoose.connection})
+    }
+))
+
+//Serialize
+
+app.use(passport.initialize)
+app.use(passport.session)
+
+app.use('/news', passport.mustBeAuthenticated)
 
 // NEWS
 app.get('/news', (req, res) => {
@@ -91,7 +114,7 @@ app.get('/', async (req, res) => {
     const tasks = await taskModel.find().sort('-created').lean()
     res.render('tasks', {tasks})
 })
-app.get('/:id', async (req, res) => {
+app.get('/task/:id', async (req, res) => {
     const {id} = req.params
     const tasks = await taskModel.find().sort('-created').lean()
     const task = await taskModel.findById(id)
@@ -105,7 +128,7 @@ app.post('/', async (req, res) => {
     }
     res.redirect('/')
 })
-app.post('/:id', async (req, res) => {
+app.post('/task/:id', async (req, res) => {
     const {id} = req.params
     if(req.body.save === 'Редактировать' && req.body.title){
         const task = await taskModel.findOne({_id: id})
@@ -125,6 +148,48 @@ app.patch('/:id', async (req, res) => {
     task.complited = !task.complited
     const taskSaved = await task.save()
     res.sendStatus(200)
+})
+
+// Register
+
+app.get('/reg', (req, res) => {
+    const {error} = req.query
+    res.render('register', {error})
+})
+
+app.post('/reg', async (req, res) => {
+    const {rePassword, ...restBody} = req.body
+    if(restBody.password === rePassword){
+        const user = new userModel(restBody)
+        await user.save()
+        res.redirect('/auth')
+    } else {
+        res.redirect('/reg?error=1')
+    }
+})
+
+
+// Auth
+
+app.get('/auth', (req, res) => {
+    const {error} = req.query
+    res.render('auth', {error})
+})
+
+app.post('/auth', passport.authenticate )
+
+// Logout
+
+app.get('/logout', (req, res) => {
+    req.logout()
+    res.redirect('/auth')
+})
+
+
+
+
+app.get('*', (req, res) => {
+    res.redirect('/')
 })
 
 

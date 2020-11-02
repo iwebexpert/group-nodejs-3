@@ -10,9 +10,18 @@ h1 {
     text-align: center;
 }
 
+section, nav {
+    margin-bottom: 15px;
+}
+
 .container {
     max-width: var(--container-width);
     margin: 0 auto;
+}
+
+.navigate {
+    display: flex;
+    justify-content: space-between;
 }
 
 .action-form {
@@ -57,4 +66,8 @@ h1 {
     height: 15px;
     border: 1px solid black;
     text-decoration: none;
+}
+
+.hidden {
+    display: none;
 }
