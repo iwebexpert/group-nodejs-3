@@ -7,4 +7,13 @@
   "email": "suhrugen@gmail.com",
   "password": "$2a$10$d1MbpNCq2e6ijYFfqt1Gz.VQOwZCXoktEwaio9e/H.mhRxN3WY7/i",
   "__v": 0
+},{
+  "_id": {
+    "$oid": "5f9fe72c929da7a2ad701e71"
+  },
+  "firstName": "Вася",
+  "role": "admin",
+  "email": "vasia@gmail.com",
+  "password": "$2a$10$0dGlPcffbmnRQqObRNARd.NGSuj0jH2xCMSXNpfbZjbdud.uHY9la",
+  "__v": 0
 }]
