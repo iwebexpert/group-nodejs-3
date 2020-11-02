@@ -1,5 +1,5 @@
-const { Schema, model } = require('mongoose');
-const moment = require('moment');
+const { Schema, model } = require('mongoose')
+const moment = require('moment')
 
 const Task = new Schema({
   task: {
@@ -18,6 +18,10 @@ const Task = new Schema({
     type: String,
     default: `${moment().format('YYYY-MM-DD')}`,
   },
-});
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User',
+  },
+})
 
-module.exports = model('tasks', Task);
+module.exports = model('tasks', Task)

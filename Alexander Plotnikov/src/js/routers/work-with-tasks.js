@@ -4,15 +4,17 @@ const moment = require('moment');
 const router = Router();
 
 router.post('/newtask', async (req, res) => {
+
   let obj = new Task({
     task: req.body.task || 'No task',
     priority: req.body.priority,
     status: req.body.status,    
     date: req.body.date || `${moment().format('YYYY-MM-DD')}`,
+    user: req.user._id
   });
   try {
     await obj.save();
-    let tasks = await Task.find();
+    let tasks =  await Task.find({ user: req.user._id }).lean()
     res.json({ result: true, tasks: tasks.sort(sortByDate) });
   } catch (e) {
     console.error(e);

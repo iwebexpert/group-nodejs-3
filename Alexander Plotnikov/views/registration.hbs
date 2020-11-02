@@ -1,0 +1,123 @@
+<div class="cont center" id="form">
+    <form class="col-10" method="POST" action="/registration">
+        <h1 class="mb-5">Registration</h1>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Login</label>
+            <input type="text" class="form-control" name="login" placeholder="Enter login">
+            <p  data-field="login" class="form-text text-danger invis fontSize">Minimum length name is 3</p>
+            <p data-login="login" class="form-text text-danger invis fontSize">This login is already
+                busy!</p>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" data-field="email" class="form-control" name="email" placeholder="Enter email">
+            <p  data-field="email" class="form-text text-danger invis fontSize">Required format : nick@mail.com.</p>
+            <p data-login="email" class="form-text text-danger invis fontSize">This email is already busy!</p>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" id ="p1" class="form-control" name="password" placeholder="Password">
+            <p  data-field="password"  class="form-text text-danger invis fontSize">Minimum length name is 3</p>
+            <p data-login="email"  class="form-text text-danger invis fontSize">Passwords aren't the
+                same...</p>
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" id ="p2" class="form-control" name="password2" placeholder="Password">
+            <p data-field="password2" class="form-text text-danger invis fontSize">Minimum length name is 3</p>
+            <p data-login="email"  class="form-text text-danger invis fontSize">Passwords aren't the same...</p>
+            
+        </div>
+        <button type="submit" id="formSubmit" class="btn btn-primary" disabled>Register</button>
+    </form>
+</div>
+<script>
+    let d = document
+
+    class Form {
+        constructor(idForm, idSubmit) {
+
+            this.form = d.querySelector(idForm)
+            this.submit = this.form.querySelector(idSubmit)
+            this.regExps = {
+                login: ['^[а-яА-ЯёЁA-z]{3,}$', 'i'],
+                email: ['^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$', 'i'],
+                text: ['\\w{3,}', 'i'],
+                password: ['\\w{3,}', 'i'],
+                password2: ['\\w{3,}', 'i'],
+            }
+            this.fields = []
+
+            this._init()
+
+        }
+
+        _init() {
+            this._createForm()
+            this._handler()
+        }
+
+        _createForm() {
+
+            let form = this.fields = [...this.form.querySelectorAll('input')]
+
+            this.fields = form.map(field => {
+              
+
+                return {
+                    el: field,
+                    messegeEl: this.form.querySelector(`p[data-field = "${field.name}"]`),
+                    regE: this.regExps[`${field.name}`],
+                    valid: false
+                }
+            })
+
+        }
+        _validForm() {
+            if (this.fields.some(field => !field.valid)) {
+                this.submit.classList.add('disabled')
+                this.submit.setAttribute('disabled', true)
+
+            } else {
+                this.submit.classList.remove('disabled')
+                this.submit.removeAttribute('disabled')
+
+            }
+        }
+        _handler() {
+
+            this.form.addEventListener('input', (e) => {
+
+                if (e.target.tagName === "INPUT") {
+
+                    let field = this.fields.filter(field => field.el.name === e.target.name)[0]
+                    console.log(field)
+                    if (new RegExp(...field.regE).test(field.el.value)) {
+
+                        field.el.classList.add('valid')
+                        field.el.classList.remove('error')
+                        field.messegeEl.classList.add('invis')
+                        field.valid = true
+                        this._validForm()
+
+                    } else {
+
+                        field.el.classList.remove('valid')
+                        field.el.classList.add('error')
+                        field.messegeEl.classList.remove('invis')
+                        field.valid = false
+                        this._validForm()
+                    }
+
+                }
+            })
+        }
+    }
+
+
+    new Form('#form', '#formSubmit')
+
+
+
+
+</script>

@@ -13859,6 +13859,16 @@ body {
   overflow: hidden;
 }
 
+.title {
+  color: white !important;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.title:hover {
+  color: rgba(255, 123, 0, 0.938) !important;
+}
+
 .cont {
   min-height: calc(100vh - 141px);
 }
@@ -14032,5 +14042,41 @@ footer {
 
 footer > p {
   margin: 0;
+}
+
+.cerror {
+  display: none;
+  font-size: 0.8rem;
+  color: red;
+}
+
+.active {
+  display: block;
+}
+
+.invis {
+  display: none;
+}
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.valid {
+  -webkit-box-shadow: 0px 0px 4px 1px #07e60f !important;
+  box-shadow: 0px 0px 4px 1px #07e60f;
+}
+
+.error {
+  -webkit-box-shadow: 0px 0px 4px 1px #e60909 !important;
+  box-shadow: 0px 0px 4px 1px #e60909 !important;
+}
+
+.fontSize {
+  font-size: 15px !important;
+}
+
+.red {
+  color: red;
 }
 /*# sourceMappingURL=main.css.map */
