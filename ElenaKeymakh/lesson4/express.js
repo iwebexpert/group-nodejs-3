@@ -83,6 +83,7 @@ app.post('/users', (req, res) => {
 })
 
 app.get('/config', (req, res) => {
+
   res.render('config')
 })
 
@@ -90,7 +91,7 @@ app.post('/config', (req, res) => {
   console.log(req.body)
   const {param1} = req.body
   console.log(+param1)
-  res.redirect('/config')
+
 
   request('https://yandex.ru/news/', (err, response, body) => {
     if(!err &&  response.statusCode === 200){
@@ -104,7 +105,7 @@ app.post('/config', (req, res) => {
         console.log(`Заголовок: ${newsTitle}`)
         console.log(`Текст новости: ${newsText}\n`)
       }
-
+      res.redirect('/config')
     }
   })
 })
