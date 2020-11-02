@@ -41,7 +41,7 @@ module.exports = {
     }),
     mustBeAuthenticated: (req, res, next) => {
         // console.log(req.originalUrl)
-        if(req.user || req.originalUrl === '/auth'){
+        if(req.user || req.originalUrl === '/auth' || req.originalUrl === '/register?err=repassword'){
             next()
         } else {
             res.redirect('/auth')
