@@ -104,7 +104,7 @@ app.post('/news', (req, res) => {
     const params = req.body
     if (params.save === 'Сохранить'){
         res.cookie('params', params)
-        res.redirect('/')
+        res.redirect('/news')
     }
 })
 
