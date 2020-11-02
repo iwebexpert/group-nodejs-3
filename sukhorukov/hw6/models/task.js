@@ -7,17 +7,26 @@ const taskSchema = new Schema({
         type: String,
         required: true
     },
+
     description: {
         type: String,
         default: "Подробности отсутствуют"
     },
+
     completed: {
         type: Boolean,
         default: false
     },
+
     priority: {
-        type:Number,
-        default: 1
+        code: {
+            type: Number,
+            default: 1
+        }, 
+        title: {
+            type: String,
+            default: "нормальный"
+        },
     }
 })
 

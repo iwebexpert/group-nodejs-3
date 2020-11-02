@@ -2,12 +2,18 @@
   {{#each tasks}}
   <div class="task-wrapper">
     <a class="task" href="/task/{{this._id}}">
+    <div>
       {{this.title}}
       <div class="description">{{this.description}}</div>
       <div class="is-completed">
         {{#if this.completed}}
-          Завершена
+          Задача завершена
         {{/if}}  
+      </div>
+    </div>
+
+    <div class="priority">
+       {{this.priority.title}} приоритет
       </div>
     </a>
 

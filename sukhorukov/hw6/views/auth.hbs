@@ -1,6 +1,6 @@
 <div>
 	{{#if error}}
-		<b>{{error}}</b>
+		<div class="error">{{error}}</div>
 	{{/if}}
 
   <form 
@@ -16,7 +16,7 @@
         {{#if isRegForm}}
           Введите данные для создания пользователя
         {{else}}
-          Введите данные для входа
+          Введите данные для входа в систему
         {{/if}}
       </legend>
 
@@ -24,7 +24,6 @@
 				<div class="form-field">  
 					<div><label class="form-label" for="firstName">Имя</label></div>
 					<input 
-						required
 						type="text"
 						id="firstName"
 						name="firstName"
@@ -58,7 +57,7 @@
 
 				{{#if isRegForm}}
 					<div class="form-field">
-						<div><label class="form-label" for="repassword">Повторить пароль</label></div>
+						<div><label class="form-label" for="repassword">Повтор пароля</label></div>
 							<input
 								required
 								type="password"

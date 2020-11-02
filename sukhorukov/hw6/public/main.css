@@ -28,6 +28,8 @@
 }
 
 .task {
+	display: flex;
+	justify-content: space-between;
 	flex-grow: 1;
 	border: 1px solid #ccc;
 	border-radius: 5px;
@@ -49,6 +51,11 @@
 	color: rgb(116, 114, 114)
 }
 
+.priority {
+	font-size: 0.7em;
+	font-weight: 600;
+}
+
 .is-completed {
 	font-size: 0.75em;
 	color: rgb(35, 138, 15);
@@ -68,6 +75,13 @@
 	color: rgb(179, 84, 84)
 }
 
+.error {
+	margin-top: 30px;
+	color: red;
+	font-weight: 600;
+	font-size: 00.8em;
+}
+
 .legend {
 	font-size: 0.9em;
 	font-weight: 600;
@@ -75,14 +89,14 @@
 }
 
 .form-label {
-	margin-left: 5px;
+	margin: 0 7px;
   font-size: 0.8em;
 	font-weight: 600;
 	color: rgb(73, 73, 73)
 }
 
 .form-field {
-	margin: 10px 40px 10px 15px;
+	margin: 15px 40px 10px 15px;
 	flex-grow: 1;
 }
 

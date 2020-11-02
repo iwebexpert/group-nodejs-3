@@ -12,7 +12,7 @@ const userSchema = new Schema({
   },
   firstName: {
     type: String,
-    default: 'Гость'
+    default: 'Безимянный'
   },
   password: {
     type: String,

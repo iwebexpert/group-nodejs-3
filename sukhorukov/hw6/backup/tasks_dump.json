@@ -1,37 +1,49 @@
 [{
   "_id": {
-    "$oid": "5f9a9db0876c1a4a3959b98f"
+    "$oid": "5f9fd8492ae0067a7004fb37"
   },
-  "description": "Это подробности задачи номер один",
+  "priority": {
+    "code": 2,
+    "title": "высокий"
+  },
+  "description": "Подробности задачи №1",
   "completed": false,
-  "priority": 2,
   "title": "Задача №1",
   "__v": 0
 },{
   "_id": {
-    "$oid": "5f9a9dd4876c1a4a3959b990"
+    "$oid": "5f9fd85a2ae0067a7004fb38"
   },
-  "description": "Это подробности задачи номер два",
+  "priority": {
+    "code": 1,
+    "title": "нормальный"
+  },
+  "description": "Подробности задачи №2",
   "completed": true,
-  "priority": 1,
   "title": "Задача №2",
   "__v": 0
 },{
   "_id": {
-    "$oid": "5f9a9e02876c1a4a3959b991"
+    "$oid": "5f9fd86c2ae0067a7004fb39"
   },
-  "description": "Это подробности задачи номер три",
+  "priority": {
+    "code": 0,
+    "title": "низкий"
+  },
+  "description": "Подробности задачи №3",
   "completed": true,
-  "priority": 0,
   "title": "Задача №3",
   "__v": 0
 },{
   "_id": {
-    "$oid": "5f9a9e42876c1a4a3959b992"
+    "$oid": "5f9fd87d2ae0067a7004fb3a"
   },
-  "description": "Это подробности задачи номер четыре",
+  "priority": {
+    "code": 0,
+    "title": "низкий"
+  },
+  "description": "Подробности задачи №4",
   "completed": false,
-  "priority": 1,
   "title": "Задача №4",
   "__v": 0
 }]

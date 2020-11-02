@@ -11,25 +11,7 @@ const taskModel = require('./models/task')
 const userModel = require('./models/user')
 
 const auth = require('./auth')
-
-/**
- * Функция создания разметки опций для выбора приоритета задачи (с выбранным элементом)
- * Так как не удалось динамически отметить выбранный элемент в Handlebars понятным мне способом
- *
- * @param {number} taskPriority - приоритет 0 - 2
- * @return {array} - html
- */
-const getOptionsTemplate = (taskPriority) => {
-  let options = [
-    `<option value="0">Низкий</option>`,
-    `<option value="1">Нормальный</option>`,
-    `<option value="2">Высокий</option>`,
-  ]
-  let option = options[taskPriority]
-  options[taskPriority] = `${option.substr(0, 7)} selected${option.substr(7)}`
-
-  return options.reverse() //для более правильного отображения выпадающего списка
-}
+const getPrioritySelectorData = require('./helpers')
 
 const app = express()
 
@@ -86,7 +68,7 @@ app.get('/users/register', (req, res) => {
     link: [
       {
         href: '/users/auth',
-        title: 'У меня есть аккаунт',
+        title: 'У меня уже есть учетная запись',
       },
     ],
   }
@@ -103,7 +85,7 @@ app.post('/users/register', async (req, res) => {
     await user.save()
     res.redirect('/users/auth')
   } else {
-    res.redirect('/users/register?error=Ощибка при заполнениии полей')
+    res.redirect('/users/register?error=Пароли не совпадают или такая учетная запись уже существует')
   }
 })
 
@@ -115,7 +97,7 @@ app.get('/users/auth', (req, res) => {
     link: [
       {
         href: '/users/register',
-        title: 'У меня нет аккаунта',
+        title: 'У меня ещё нет учётной записи',
       },
     ],
   }
@@ -165,7 +147,8 @@ app.get('/task', async (req, res) => {
     ],
   }
 
-  res.render('task', { header, options: getOptionsTemplate(1) })
+  const priorityData = getPrioritySelectorData()
+  res.render('task', {header, priorityData})
 })
 
 //создание новой задачи в базе данных
@@ -173,6 +156,10 @@ app.post('/task', async (req, res) => {
   let { body } = req
   if (body.completed) body.completed = true
   const task = new taskModel(body)
+  const {priority} = body
+  const priorityData = getPrioritySelectorData()
+  task.priority.code = priority
+  task.priority.title = priorityData[priority].title
   await task.save()
 
   res.redirect('/tasks')
@@ -192,11 +179,8 @@ app.get('/task/:id', async (req, res) => {
     ],
   }
 
-  res.render('task', {
-    header,
-    options: getOptionsTemplate(task.priority),
-    task,
-  })
+  const priorityData = getPrioritySelectorData(task.priority.code)
+  res.render('task', { header, priorityData, task})
 })
 
 //обновление старой задачи в базе данных
@@ -208,6 +192,15 @@ app.patch('/task/:id', async (req, res) => {
   } else {
     body.completed = false
   }
+
+  //засовывание значения пришедшего из селектора в поле объекта priority модели task
+  const {priority} = body
+  const priorityData = getPrioritySelectorData()
+  let priorityObj = {}
+  priorityObj.code = priority
+  priorityObj.title = priorityData[priority].title
+  body.priority = priorityObj
+  
   await taskModel.findByIdAndUpdate(id, body).lean()
 
   res.redirect('/tasks')
