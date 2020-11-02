@@ -1,0 +1,20 @@
+<div>
+    <a href="/logout">Выход</a><br>
+    <h2>Список задач</h2>
+    <ol class="wrapper">
+        {{#each tasksList}}
+            <li>
+                <a href="/task/{{this._id}}"><h4>{{this.title}}</h4>
+                    <p>{{this.desc}}</p>
+                    <p>Статус:
+                        {{#switch this.status}}
+                            {{#case 1}} Новая {{/case}}
+                            {{#case 2}} В работе {{/case}}
+                            {{#case 3}} Выполнено {{/case}}
+                        {{/switch}}</p></a>
+            </li>
+        {{/each}}
+    </ol>
+    <hr>
+    <a href="/task" class="new_q">Создать задачу</a>
+</div>
