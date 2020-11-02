@@ -115,11 +115,11 @@ app.get('/users/logout', (req, res) => {
   res.redirect('/users/auth')
 })
 
-//отображение списка, имеющихся в базе данных, задач
+//отображение списка, имеющихся в базе данных, задач текущего пользователя
 app.get('/tasks', async (req, res) => {
-  const tasks = await taskModel.find().lean()
+  const tasks = await taskModel.find({userId: req.user._id}).lean()
   const header = {
-    title: 'Список задач',
+    title: `Список задач пользователя "${req.user.firstName ==='' ? 'Безымянный' : req.user.firstName}"`,
     link: [
       {
         href: '/task',
@@ -127,7 +127,7 @@ app.get('/tasks', async (req, res) => {
       },
       {
         href: '/users/logout',
-        title: 'Выход',
+        title: `Выход`,
       },
     ],
   }
@@ -160,6 +160,7 @@ app.post('/task', async (req, res) => {
   const priorityData = getPrioritySelectorData()
   task.priority.code = priority
   task.priority.title = priorityData[priority].title
+  task.userId = req.user._id
   await task.save()
 
   res.redirect('/tasks')
@@ -174,7 +175,7 @@ app.get('/task/:id', async (req, res) => {
     link: [
       {
         href: '/tasks',
-        title: 'Список задач',
+        title: `Список задач`,
       },
     ],
   }
@@ -200,7 +201,7 @@ app.patch('/task/:id', async (req, res) => {
   priorityObj.code = priority
   priorityObj.title = priorityData[priority].title
   body.priority = priorityObj
-  
+
   await taskModel.findByIdAndUpdate(id, body).lean()
 
   res.redirect('/tasks')

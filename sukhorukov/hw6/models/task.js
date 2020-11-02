@@ -27,6 +27,11 @@ const taskSchema = new Schema({
             type: String,
             default: "нормальный"
         },
+    },
+
+    userId: {
+        type: String,
+        required: true
     }
 })
 
