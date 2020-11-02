@@ -109,3 +109,5 @@ dist
 
 # Other
 .DS_Store
+back/settings/settings.js
+lesson*/
