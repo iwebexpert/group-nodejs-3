@@ -1,0 +1,15 @@
+<section>
+    <div class="container">
+        {{#if error}}
+        <b>Неправильная пара логин/пароль</b>
+        {{/if}}
+        <form action="/auth" method="POST" class="form-enter">
+                <input type="text" placeholder="Email" name="email">
+                <input type="password" name="password" placeholder="Password">
+                <input type="submit" value="Войти">
+        </form>
+        <div>
+            <a href="/reg">Зарегестрироваться</a>
+        </div>
+    </div>
+</section>

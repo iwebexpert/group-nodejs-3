@@ -1,0 +1,14 @@
+<section>
+    <div class="container">
+        {{#if error}}
+        <b>Пароли не совпадают</b>
+        {{/if}}
+        <form action="/reg" method="POST">
+            <input type="text" placeholder="Email" name="email"><br><br>
+            <input type="text" placeholder="Name" name="name"><br><br>
+            <input type="password" name="password" placeholder="Password"><br><br>
+            <input type="password" name="rePassword" placeholder="rePassword"><br><br>
+            <input type="submit" value="Register">
+        </form>
+    </div>
+</section>

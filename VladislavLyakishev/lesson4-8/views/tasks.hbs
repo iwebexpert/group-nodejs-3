@@ -1,23 +1,26 @@
-<div class="container">
-    <div>
-        <form action="/{{id}}" method="POST" class="tasks__add">
-            <input type="text" name="title" placeholder="Введите задачу" value="{{value}}">
-            <input type="submit" name="save" value="{{#if value}}Редактировать{{else}}Добавить{{/if}}">
-        </form>
-    </div>
-    <div class="tasks">
-        {{#each tasks}}
-            <div class="task" id="{{this._id}}">
-                <input type="checkbox" {{#if this.complited}} checked {{/if}} class="task_checked" data-id="{{this._id}}">
-                <p class="{{#if this.complited}} task_complite {{/if}}" id="p-{{this._id}}">{{this.title}}</p>
-                <div class="tasks__control">
-                    <a href="/{{this._id}}" class="control edit">e</a>
-                    <a href="" class="control delete" data-id="{{this._id}}">x</a>
+
+<section>
+    <div class="container">
+        <div>
+            <form action="/{{id}}" method="POST" class="tasks__add">
+                <input type="text" name="title" placeholder="Введите задачу" value="{{value}}">
+                <input type="submit" name="save" value="{{#if value}}Редактировать{{else}}Добавить{{/if}}">
+            </form>
+        </div>
+        <div class="tasks">
+            {{#each tasks}}
+                <div class="task" id="{{this._id}}">
+                    <input type="checkbox" {{#if this.complited}} checked {{/if}} class="task_checked" data-id="{{this._id}}">
+                    <p class="{{#if this.complited}} task_complite {{/if}}" id="p-{{this._id}}">{{this.title}}</p>
+                    <div class="tasks__control">
+                        <a href="/task/{{this._id}}" class="control edit">e</a>
+                        <a href="" class="control delete" data-id="{{this._id}}">x</a>
+                    </div>
                 </div>
-            </div>
-        {{/each}}
+            {{/each}}
+        </div>
     </div>
-</div>
+</section>
 
 <script>
     //Delete
@@ -42,6 +45,7 @@
     const checkedElem = document.querySelectorAll(".task_checked");
     checkedElem.forEach( elem => {
         elem.addEventListener('change', event => {
+            event.preventDefault()
             fetch('/' + event.target.getAttribute('data-id'), {
                 method: 'PATCH',
             }).then(
