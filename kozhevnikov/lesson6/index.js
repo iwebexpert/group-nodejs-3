@@ -82,4 +82,12 @@ app.get('/logout', (req, res) => {
   res.redirect('/auth')
 })
 
+// app.post('/remove', async (req, res) => {
+//   const {id} = req.body
+//   if(id){
+//     await taskModel.findByIdAndRemove(id)
+//   }
+//   res.redirect('/')
+// })
+
 start()
