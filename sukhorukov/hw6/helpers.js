@@ -6,11 +6,12 @@
  */
 const getPrioritySelectorData = (taskPriority = 1) => {
   const priorityData = [
-    {title: "низкий"},
-    {title: "нормальный"},
-    {title: "высокий"},
+    {code: 2, title: "высокий"},
+    {code: 1, title: "нормальный"},
+    {code: 0, title: "низкий"},
+    
   ]
-  priorityData[taskPriority].selected = true
+  priorityData.find(item => item.code == taskPriority).selected = true
 
   return priorityData
 }

@@ -41,7 +41,7 @@
         <div><label class="form-label" for="priority">Приоритет</label></div>
         <select id="priority" name="priority">
           {{#each priorityData}}
-            <option {{#if this.selected}}selected{{/if}} value={{@index}}>{{this.title}}</option>
+            <option {{#if this.selected}}selected{{/if}} value={{this.code}}>{{this.title}}</option>
           {{/each}}
         </select>
       </div>

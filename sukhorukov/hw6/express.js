@@ -157,9 +157,10 @@ app.post('/task', async (req, res) => {
   if (body.completed) body.completed = true
   const task = new taskModel(body)
   const {priority} = body
+
   const priorityData = getPrioritySelectorData()
   task.priority.code = priority
-  task.priority.title = priorityData[priority].title
+  task.priority.title = priorityData.find(item => item.code == priority).title
   task.userId = req.user._id
   await task.save()
 
@@ -199,7 +200,7 @@ app.patch('/task/:id', async (req, res) => {
   const priorityData = getPrioritySelectorData()
   let priorityObj = {}
   priorityObj.code = priority
-  priorityObj.title = priorityData[priority].title
+  priorityObj.title = priorityData.find(item => item.code == priority).title
   body.priority = priorityObj
 
   await taskModel.findByIdAndUpdate(id, body).lean()
