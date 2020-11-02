@@ -1,0 +1,16 @@
+<div>
+    <h2>Настройки</h2>
+    <form method="post" action="/config">
+        <div>
+            <label>Максимальное количество новостей на странице:
+                <input type="number" name="count" value="{{count}}">
+            </label>
+        </div>
+        <div>
+            <label>Показать только сегодняшние новости:
+                <input type="checkbox" name="fresh_only" {{#if fresh_only}}checked="checked"{{/if}}>
+            </label>
+        </div>
+        <input type="submit" value="ОТПРАВИТЬ">
+    </form>
+</div>

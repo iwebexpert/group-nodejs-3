@@ -1,0 +1,8 @@
+<h2>Новости</h2>
+<hr>
+<button><a href="/config">Настроить</a></button>
+<ul>
+    {{#each news}}
+        <li><a href="{{this.href}}">{{this.title}}</a></li>
+    {{/each}}
+</ul>
