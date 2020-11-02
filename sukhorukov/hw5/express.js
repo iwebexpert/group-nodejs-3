@@ -8,7 +8,7 @@ const methodOverride = require('method-override')
 const taskModel = require('./models/task')
 
 /**
- * Функция создание разметки опций для выбора приоритета задачи (с выбранным элементом)
+ * Функция создания разметки опций для выбора приоритета задачи (с выбранным элементом)
  * Так как не удалось динамически отметить выбранный элемент в Handlebars понятным мне способом
  * 
  * @param {number} taskPriority - приоритет 0 - 2
@@ -63,7 +63,7 @@ app.get('/', async (req, res) => {
   res.render('tasks', {header, tasks})
 })
 
-// отобрадение формы для для запроса данных на создания задачи
+// отображение формы для запроса данных на создания задачи
 app.get('/create', async (req, res) => {
   const options = getOptionsTemplate(1)
   const header = {title: 'Новая задача!'}
@@ -76,13 +76,12 @@ app.post('/', async (req, res) => {
   let { body } = req
   if (body.completed) body.completed = true
   const task = new taskModel(body)
-  console.log(`task: `, task, body)
   const saved = await task.save()
 
-  if (saved) res.redirect('/')
+  res.redirect('/')
 })
 
-// отобрадение формы для запроса данных на изменение задачи (используется view.hbs создания задачи)
+// отображение формы для запроса данных на изменение задачи (используется view.hbs создания задачи)
 app.get('/update/:id', async (req, res) => {
   const { id } = req.params
 	const task = await taskModel.findById(id).lean()
@@ -104,7 +103,7 @@ app.put('/:id', async (req, res) => {
 	}
   const updated = await taskModel.findByIdAndUpdate(id, body).lean()
   
-  if (updated) res.redirect('/')
+  res.redirect('/')
 })
 
 // удаление задачи из базы данных
@@ -112,7 +111,7 @@ app.delete('/:id', async (req, res) => {
   const { id } = req.params
   const deleted = await taskModel.findByIdAndDelete(id)
 
-  if (deleted) res.redirect('/')
+  res.redirect('/')
 })
 
 app.get('*', (req, res) => {

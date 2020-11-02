@@ -1,0 +1,79 @@
+[{
+  "_id": {
+    "$oid": "5f9fe76e929da7a2ad701e72"
+  },
+  "priority": {
+    "code": 2,
+    "title": "высокий"
+  },
+  "description": "Эту задачу создал Руслан ...",
+  "completed": false,
+  "title": "Задача №1",
+  "userId": "5f9fd77465d22c78e240313e",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5f9fe787929da7a2ad701e73"
+  },
+  "priority": {
+    "code": 1,
+    "title": "нормальный"
+  },
+  "description": "Эту задачу тоже создал Руслан",
+  "completed": true,
+  "title": "Задача №2",
+  "userId": "5f9fd77465d22c78e240313e",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5f9fe7a6929da7a2ad701e74"
+  },
+  "priority": {
+    "code": 0,
+    "title": "низкий"
+  },
+  "description": "Эту задачу опять создал Руслан",
+  "completed": true,
+  "title": "Задача №3",
+  "userId": "5f9fd77465d22c78e240313e",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5f9fe7fe929da7a2ad701e75"
+  },
+  "priority": {
+    "code": 0,
+    "title": "низкий"
+  },
+  "description": "Эту задачу создавал пользователь Вася",
+  "completed": true,
+  "title": "Задача №1",
+  "userId": "5f9fe72c929da7a2ad701e71",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5f9fe81b929da7a2ad701e76"
+  },
+  "priority": {
+    "code": 2,
+    "title": "высокий"
+  },
+  "description": "Эту задачу создавал пользователь Василий",
+  "completed": false,
+  "title": "Задача №2",
+  "userId": "5f9fe72c929da7a2ad701e71",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5f9fe84b929da7a2ad701e77"
+  },
+  "priority": {
+    "code": 1,
+    "title": "нормальный"
+  },
+  "description": "Василий Петрович, взял, да и создал эту задачу",
+  "completed": true,
+  "title": "Задача №3",
+  "userId": "5f9fe72c929da7a2ad701e71",
+  "__v": 0
+}]

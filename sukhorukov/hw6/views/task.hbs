@@ -1,0 +1,69 @@
+<div>
+  <form 
+    method="post"
+    {{#if task}}
+      action="/task/{{task._id}}?_method=PATCH"
+    {{else}}
+      action="/task"
+    {{/if}}>
+    <input type="hidden" name="_method" value="PATCH">
+    <fieldset class="task-field-set">
+      <legend class="legend">
+        {{#if task}}
+          Редактирование ранее созданной задачи
+        {{else}}
+          Создание новой задачи
+        {{/if}}
+      </legend>
+
+      <div class="form-field">  
+        <div><label class="form-label" for="title">Задача</label></div>
+        <input 
+          required
+          type="text"
+          id="title"
+          name="title"
+          value="{{task.title}}"
+          placeholder="наименование"
+          style="width: 45%">
+      </div>
+
+      <div class="form-field">  
+        <div><label class="form-label" for="description">Подробности</label></div>
+        <textarea
+          class="form-task-description"  
+          id="description"
+          name="description"
+          placeholder="подробное описание задачи">{{task.description}}</textarea>
+      </div>
+
+      <div class="form-field">
+        <div><label class="form-label" for="priority">Приоритет</label></div>
+        <select id="priority" name="priority">
+          {{#each priorityData}}
+            <option {{#if this.selected}}selected{{/if}} value={{this.code}}>{{this.title}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="completed form-field">
+        <input 
+          type="checkbox"
+          id="completed"
+          name="completed"
+          {{#if task}}
+            {{#if task.completed}} checked {{/if}}
+          {{/if}}>
+        <label class="form-label" for="completed">Завершена</label>
+      </div>
+    </fieldset>
+    
+    <input 
+      type="submit"
+      {{#if task}}
+        value="Изменить"
+      {{else}}
+        value="Создать"
+      {{/if}}>
+  </form>
+</div>
