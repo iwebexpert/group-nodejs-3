@@ -2,6 +2,10 @@ const { Router } = require('express')
 const Task = require('../models/Task')
 const router = Router()
 
+router.get('', async (req, res) => {
+  res.redirect('/tasks')
+})
+
 router.get('/tasks', async (req, res) => {
   const tasks = await Task.find({})
 
