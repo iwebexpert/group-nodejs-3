@@ -2,7 +2,7 @@ const { Router } = require('express')
 const Task = require('../models/Task')
 const router = Router()
 
-router.get('/', async (req, res) => {
+router.get('/tasks', async (req, res) => {
   const tasks = await Task.find({})
 
   res.render('index', {
@@ -25,7 +25,7 @@ router.post('/create', async (req, res) => {
   })
 
   await task.save()
-  res.redirect('/')
+  res.redirect('/tasks')
 })
 
 router.post('/complete', async (req, res) => {
@@ -34,7 +34,7 @@ router.post('/complete', async (req, res) => {
   task.completed = !!req.body.completed
   await task.save()
 
-  res.redirect('/')
+  res.redirect('/tasks')
 })
 
 module.exports = router

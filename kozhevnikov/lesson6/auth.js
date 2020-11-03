@@ -36,11 +36,12 @@ module.exports = {
     initialize: passport.initialize(),
     session: passport.session(),
     authenticate: passport.authenticate('local', {
-        successRedirect: '/',
+        successRedirect: '/tasks',
         failureRedirect: '/auth?error=1',
     }),
     mustBeAuthenticated: (req, res, next) => {
         // console.log(req.originalUrl)
+        // if(req.user || req.originalUrl === '/auth' || req.originalUrl === '/register'){
         if(req.user || req.originalUrl === '/auth' || req.originalUrl === '/register'){
             next()
         } else {
