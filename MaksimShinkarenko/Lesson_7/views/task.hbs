@@ -1,0 +1,28 @@
+<div class="task_form">
+    {{#if task}}
+        <h2>Изменить задачу</h2>
+    <form action="#" onsubmit="patchForm(event)">
+        <input type="hidden" name="id" value="{{task._id}}"  id="id">
+    {{else}}
+        <h2>Создать задачу</h2>
+    <form method="POST" action="/task">
+    {{/if}}
+        <label for="title">Название задачи</label>
+        <input type="text" name="title" id="title" value="{{task.title}}">
+        <label for="desc">Описание задачи</label>
+        <textarea name="desc" id="desc" cols="30" rows="10">{{task.desc}}</textarea>
+
+        <label for="status">Статус задачи</label>
+        <select name="status" id="status">
+            <option value="1" {{#ifEquals task.status 1}}selected{{/ifEquals}}>Новая задача</option>
+            <option value="2" {{#ifEquals task.status 2}}selected{{/ifEquals}}>В процессе</option>
+            <option value="3" {{#ifEquals task.status 3}}selected{{/ifEquals}}>Завершена</option>
+        </select>
+        {{#if task}}
+            <input type="submit" value="Изменить">
+            <button onclick="delForm(event)" data-id="{{task._id}}">Удалить</button>
+        {{else}}
+            <input type="submit" value="Добавить">
+        {{/if}}
+    </form>
+</div>
