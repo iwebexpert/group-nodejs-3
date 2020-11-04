@@ -1,16 +1,13 @@
 const express = require('express')
-const path = require('path')
 const mongoose = require('./config/mongodb')
-const session = require('express-session')
-const MongoStore = require('connect-mongo')(session)
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
+const methodOverride = require('method-override')
 
 const TOKEN_SECRET_KEY = 'asdfag5w54ydh34ga423'
 
 const TasksModel = require('./models/tasks')
 const UserModel = require('./models/user')
-const passport = require('./auth')
 
 const app = express()
 
@@ -34,16 +31,7 @@ const mustBeAuthenticatedRestApi = (req, res, next) => {
 app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({extended: false}))
-app.use(express.static('public'))
-
-/*app.use(session({
-  resave: true,
-  saveUninitialized: false,
-  secret: 'secretpass123123123',
-  store: new MongoStore({mongooseConnection: mongoose.connection})
-}))
-app.use(passport.initialize)
-app.use(passport.session)*/
+app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => {
   res.status(204).send()
