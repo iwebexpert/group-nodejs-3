@@ -1,134 +1,135 @@
 const express = require('express')
-const hbs = require('express-handlebars')
-const cookieParser = require('cookie-parser')
 const path = require('path')
 const mongoose = require('./config/mongodb')
 const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
+const cors = require('cors')
+const jwt = require('jsonwebtoken')
 
-const tasksModel = require('./models/tasks')
-const userModel = require('./models/user')
+const TOKEN_SECRET_KEY = 'asdfag5w54ydh34ga423'
+
+const TasksModel = require('./models/tasks')
+const UserModel = require('./models/user')
 const passport = require('./auth')
 
 const app = express()
 
+const mustBeAuthenticatedRestApi = (req, res, next) => {
+  if (req.headers.authorization) {
+    const [type, token] = req.headers.authorization.split(' ')
+
+    jwt.verify(token, TOKEN_SECRET_KEY, (err, decoded) => {
+      if (err) {
+        return res.status(403).send()
+      }
+
+      req.user = decoded
+      next()
+    })
+  } else {
+    res.status(403).send()
+  }
+}
+
 app.use(express.json())
+app.use(cors())
 app.use(express.urlencoded({extended: false}))
-app.use(cookieParser())
 app.use(express.static('public'))
 
-app.engine('hbs', hbs({
-  extname: 'hbs',
-  defaultLayout: 'default',
-  layoutsDir: path.join(__dirname, 'views', 'layouts'),
-  partialsDir: path.join(__dirname, 'views', 'partials'),
-  helpers: {
-    switch: function (value, options) {
-      this.switch_value = value
-      return options.fn(this)
-    },
-    case: function (value, options) {
-      if (value === this.switch_value) {
-        return options.fn(this)
-      }
-    },
-    ifEquals: function (arg1, arg2, options) {
-      return (arg1 === arg2) ? options.fn(this) : options.inverse(this)
-    }
-  }
-}))
-app.set('view engine', 'hbs')
-
-app.use(session({
+/*app.use(session({
   resave: true,
   saveUninitialized: false,
   secret: 'secretpass123123123',
   store: new MongoStore({mongooseConnection: mongoose.connection})
 }))
 app.use(passport.initialize)
-app.use(passport.session)
+app.use(passport.session)*/
 
-app.all('/', (req, res) => {
-  res.redirect('/tasks')
+app.get('/', (req, res) => {
+  res.status(204).send()
 })
 
-app.use(['/task', '/tasks'], passport.mustBeAuthenticated)
+app.use(['/task', '/tasks'], mustBeAuthenticatedRestApi)
 
 app.get('/tasks', async (req, res) => {
-  const tasksList = await tasksModel.where('userId').equals(req.user._id).lean()
-  res.render('tasksList', {tasksList})
+  const tasksList = await TasksModel.where('user').equals(req.user._id).lean()
+  return res.status(200).json(tasksList)
 })
-
-app.get('/task', async (req, res) => {
-  res.render('task')
-})
-
 
 app.get('/task/:id', async (req, res) => {
-  const task = await tasksModel.findById(req.params.id).lean()
-  if (task.userId === req.user._id)
-    res.render('task', {task})
+  const task = await TasksModel.findById(req.params.id).lean()
+  if (task.user === req.user._id)
+    return res.status(200).json(task)
   else
-    res.render('error')
+    return res.status(403).send()
 })
 
 app.post('/task', async (req, res) => {
   try {
-    const task = new tasksModel(req.body)
-    task.userId = req.user._id
+    const task = new TasksModel(req.body)
+    task.user = req.user._id
     const taskSaved = await task.save()
-    res.redirect('/tasks')
+    return res.status(201).send()
   } catch {
-    res.redirect('/task')
+    return res.status(400).json({error: 'Error'})
   }
 })
 
 app.delete('/task/:id', async (req, res) => {
-  const task = await tasksModel.findById(req.params.id)
-  if (task.userId === req.user._id)
+  const task = await TasksModel.findById(req.params.id)
+  if (task.user === req.user._id){
     await task.deleteOne({_id: req.params.id})
+    return res.status(204).send()
+  }
   else
-    throw "Error deleting"
+    return res.status(403).send()
 })
 
-app.patch('/task/:id', async (req, res) => {
-  const task = await tasksModel.findById(req.params.id)
-  if (task.userId === req.user._id)
+app.put('/task/:id', async (req, res) => {
+  const task = await TasksModel.findById(req.params.id)
+  if (task.user=== req.user._id) {
     await task.updateOne(req.body)
+    return res.status(201).send()
+  }
   else
-    throw "Error updating"
-})
-
-app.get('/register', (req, res) => {
-  res.render('register')
+    return res.status(403).send()
 })
 
 app.post('/register', async (req, res) => {
   const {repassword, ...restBody} = req.body
 
   if(restBody.password === repassword){
-    const user = new userModel(restBody)
+    const user = new UserModel(restBody)
     await user.save()
-    res.redirect('/auth')
+    res.status(204).send()
   } else {
-    res.redirect('/register?err=repassword')
+    res.status(400).json({error: "Error"})
   }
 })
 
-app.get('/auth', (req, res) => {
-  const {error} = req.query
-  res.render('auth', {error})
-})
+app.post('/auth', async (req, res) => {
+  const {email, password} = req.body
+  const user = await UserModel.findOne({email})
 
-app.post('/auth', passport.authenticate)
+  if (!user) {
+    return res.status(401).send()
+  }
 
-app.get('/logout', (req, res) => {
-  req.logout()
-  res.redirect('/auth')
+  if (!user.validatePassword(password)) {
+    return res.status(401).send()
+  }
+
+  const plainUser = JSON.parse(JSON.stringify(user))
+  delete plainUser.password
+
+  res.status(200).json({
+    ...plainUser,
+    token: jwt.sign(plainUser, TOKEN_SECRET_KEY)
+  })
 })
 
 app.get('*', (req, res) => {
-  res.status(404).render('error')
+  res.status(404).send()
 })
 
 app.listen(4000, () => {

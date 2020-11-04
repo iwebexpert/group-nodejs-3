@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 
 const SALT_ROUNDS = 12
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
@@ -23,7 +23,7 @@ const userSchema = new Schema({
   },
 })
 
-userSchema.pre('save', function (next) {
+UserSchema.pre('save', function (next) {
   if (this.isModified('password')) {
     const salt = bcryptjs.genSaltSync(SALT_ROUNDS)
     this.password = bcryptjs.hashSync(this.password, salt)
@@ -31,8 +31,8 @@ userSchema.pre('save', function (next) {
   next()
 })
 
-userSchema.methods.validatePassword = function (password) {
+UserSchema.methods.validatePassword = function (password) {
   return bcryptjs.compareSync(password, this.password)
 }
 
-module.exports = mongoose.model('User', userSchema, 'users')
+module.exports = mongoose.model('User', UserSchema, 'users')
