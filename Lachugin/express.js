@@ -5,6 +5,7 @@ const path = require("path");
 
 const newsArray = require("./data/news");
 const users = require("./data/users");
+const TaskModel = require("./models/taskMysql");
 
 const app = express();
 
@@ -23,34 +24,6 @@ app.engine(
   })
 );
 app.set("view engine", "hbs");
-
-app.use((req, res, next) => {
-  console.log("Middleware 1");
-  // console.log(req)
-  // console.log(res)
-  next();
-});
-
-app.use("/users", (req, res, next) => {
-  console.log("Middleware 2");
-  next();
-});
-
-app.all("/users", (req, res, next) => {
-  console.log("Middleware 3");
-  next();
-});
-
-//Работа с заголовками
-app.use((req, res, next) => {
-  console.log("Middleware 4");
-  // console.log(req.headers)
-
-  if (req.headers.test === "1234") {
-    req.test = "Передан пользовательский заголовок test!";
-  }
-  next();
-});
 
 app.get("/", (req, res) => {
   res.status(200).send("Hello, express.js!");
