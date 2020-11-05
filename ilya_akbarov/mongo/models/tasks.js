@@ -10,10 +10,12 @@ const taskSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 })
 
 const TaskModel = mongoose.model('Task', taskSchema, 'tasks')
 
-module.exports = {
-  TaskModel,
-}
+module.exports = TaskModel

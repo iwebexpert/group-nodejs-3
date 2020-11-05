@@ -3,14 +3,17 @@ const express = require('express')
 const hbs = require('express-handlebars')
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
 
-const userController = require('./controllers/usersController')
+const userController = require('./controllers/userController')
 const newsController = require('./controllers/newsController')
 const taskController = require('./controllers/taskController')
+const passport = require('./auth')
 
 const app = express()
 
-mongoose.connect('mongodb://localhost:27016/tasks', {
+mongoose.connect('mongodb://localhost:27016/tasks2', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
@@ -36,12 +39,24 @@ app.engine(
 )
 
 app.set('view engine', 'hbs')
+app.use(
+  session({
+    resave: true,
+    saveUninitialized: false,
+    secret: '12asdasd12dsaklmrg32mok',
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+    }),
+  })
+)
+app.use(passport.initialize)
+app.use(passport.session)
 
 app.get('/', (req, res) => {
   res.render('home')
 })
 
-app.use('/users', userController)
+app.use('/user', userController)
 app.use('/news', newsController)
 app.use('/tasks', taskController)
 
