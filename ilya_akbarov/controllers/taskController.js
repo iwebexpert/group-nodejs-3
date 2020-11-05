@@ -1,12 +1,14 @@
-const { text } = require('express')
 const express = require('express')
 const router = express.Router()
-const { TaskModel } = require('../mongo/models')
+const TaskModel = require('../mongo/models/tasks')
+const passport = require('../auth')
+
+router.use('/', passport.mustBeAuthenticated)
 
 router.get('/', async (req, res) => {
   try {
-    const tasks = await TaskModel.find()
-    res.json(tasks)
+    const tasks = await TaskModel.find().lean()
+    res.render('tasks', { tasks })
   } catch (err) {
     res.status(500).send('Ошибка сервера')
   }

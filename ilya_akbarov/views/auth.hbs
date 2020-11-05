@@ -1,0 +1,15 @@
+{{#if error }}
+  <strong>Не правильный логин или пароль</strong>
+{{/if}}
+
+<h1>Вход</h1>
+
+<form method="POST" action="/user/auth">
+  <input type="email" name="email" placeholder="Email">
+  <input type="password" name="password" placeholder="Password">
+  <input type="submit" value="Войти">
+</form>
+
+<div>
+  <a href="/user/register">Зарегестрироваться</a>
+</div>
