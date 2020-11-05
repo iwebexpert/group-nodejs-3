@@ -6,7 +6,7 @@ const MongoStore = require('connect-mongo')(session)
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
 
-const TOKEN_SECRET_KEY = '1234ufhliuadshfdjghfoieruoewryhisdgf'
+const TOKEN_SECRET_KEY = 'jklhkljkghjkkl122eruoewryhisdgf'
 
 const PORT = process.env.PORT || 3000
 
@@ -58,7 +58,7 @@ app.use(express.static('public'))
 app.use(session({
     resave: true,
     saveUninitialized: false,
-    secret: '1234dfshkhgfoifdguoifdsgufisdugfjug',
+    secret: 'jklhkljkghjkkl122eruoewryhisdgf',
     store: new MongoStore({mongooseConnection: mongoose.connection})
 }))
 app.use(passport.initialize)
@@ -68,7 +68,8 @@ app.use('/tasks', mustBeAuthenticatedRestApi)
 
 app.get('/tasks', async (req, res) => {
     const tasks = await taskModel.find().lean()
-    res.status(200).json(tasks)
+       res.status(200).json(tasks)
+
 })
 
 app.post('/tasks', async (req, res) => {
