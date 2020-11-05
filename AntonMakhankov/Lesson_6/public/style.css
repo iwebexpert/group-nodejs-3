@@ -1,0 +1,136 @@
+body {
+    font-size: 1rem;
+    background-image: linear-gradient(45deg, #07A3B2, #D9ECC7);
+    min-height: 100vh;
+    padding: 10vh;
+}
+
+a {
+    color: #07A3B2;
+}
+
+a:hover,
+a:focus {
+    color: #076c76;
+}
+
+.btn-primary {
+    background-color: #07A3B2;
+    border-color: #07A3B2;
+}
+
+.btn-primary:hover,
+.btn-primary:hover {
+    background-color: #076c76;
+    border-color: #076c76;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+    color: #fff;
+    background-color: #9bdfe5;
+    border-color: #9bdfe5;
+}
+
+.block {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
+    padding: 40px;
+}
+
+.tasks-container ul {
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.tasks-container ul li {
+    display: flex;
+    align-items: flex-start;
+    justify-content: auto;
+    background-color: #fffcd9;
+    margin-bottom: 1rem;
+}
+
+.tasks-container ul li .task-text {
+    flex: 1;
+    padding: .5rem 1rem;
+}
+
+.tasks-container ul li .task-btn-remove button,
+.tasks-container ul li .task-btn-complete button {
+    background-color: transparent;
+    border: none;
+    padding: .5rem;
+    transition: all .3s ease-in-out;
+}
+
+.tasks-container ul li .task-btn-complete button {
+    color: #28a745;
+}
+
+.tasks-container ul li .task-btn-remove button {
+    color: #dc3545;
+}
+
+.tasks-container ul li .task-btn-complete button:hover,
+.tasks-container ul li .task-btn-complete button:focus {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.tasks-container ul li .task-btn-remove button:hover,
+.tasks-container ul li .task-btn-remove button:focus {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.tasks-container ul li.task-completed {
+    background-color: #dfffd9;
+}
+
+.tasks-container ul li.task-completed .task-text {
+    opacity: .5;
+    text-decoration: line-through;
+}
+
+.tasks-container ul li.task-completed .task-btn-complete {
+    display: none;
+}
+
+.task-new {
+    margin-bottom: 2rem;
+}
+
+.task-new form {
+    display: flex;
+    align-items: flex-start;
+    justify-content: auto;
+    background-color: #fffcd9;
+}
+
+.task-new form input {
+    flex: 1;
+    padding: .5rem 1rem;
+    background-color: #d9faff;
+    border: none;
+}
+
+.task-new form input:hover,
+.task-new form input:focus {
+    outline: none;;
+}
+
+.task-new form button {
+    background-color: #d9faff;
+    color: #007bff;
+    border: none;
+    padding: .5rem;
+    transition: all .3s ease-in-out;
+}
+
+.task-new form button:hover,
+.task-new form button:focus {
+    color: #d9faff;
+    background-color: #007bff;
+}
