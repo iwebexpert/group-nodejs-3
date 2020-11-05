@@ -67,6 +67,7 @@ app.get('/', async (req, res) => {
       </ul>\
       <ul>\
         <li>/tasks (GET) - получить список задач</li>\
+        <li>/tasks/id (GET) - получиь одну задачу</li>\
         <li>/tasks (POST) - создать новую задачу</li>\
         <li>/tasks/id (PATCH) - изменить задачу</li>\
         <li>/tasks/id (DELETE) - удалить задачу</li>\
