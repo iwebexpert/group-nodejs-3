@@ -1,0 +1,31 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4 offset-4">
+            <div class="block">
+                <h1>Регистрация</h1>
+                <form method="POST" action="/register">
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" name="email" class="form-control" id="signup-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-name">Имя</label>
+                        <input type="text" name="firstName" class="form-control" id="signup-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Пароль</label>
+                        <input type="password" name="password" class="form-control" id="signup-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password-repeat">Повтор пароля</label>
+                        <input type="password" name="repassword" class="form-control" id="signup-password-repeat" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </form>
+                <div>
+                    <a href="/auth">У меня уже есть аккаунт</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
