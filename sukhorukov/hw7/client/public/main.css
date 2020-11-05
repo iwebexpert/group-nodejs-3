@@ -1,0 +1,116 @@
+.container {
+	width: 75vw;
+	height: 97vh;
+	margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+	align-items: baseline;
+}
+
+.header-link {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+	color: rgb(25, 129, 121);
+}
+
+.header-link:hover {
+	text-shadow: 1px 1px 2px rgb(25, 129, 121), 0 0 1em rgb(25, 129, 121);
+}
+
+.task-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.task {
+	display: flex;
+	justify-content: space-between;
+	flex-grow: 1;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px 0;
+	margin-right: 15px;
+	text-decoration: none;
+	font-size: 1.1em;
+	font-weight: 600;
+	color: rgb(94, 94, 94)
+}
+
+.task:hover {
+	box-shadow: 0 0 3px rgba(0,0,0,0.5)
+}
+
+.description {
+	font-size: 0.75em;
+	color: rgb(116, 114, 114)
+}
+
+.priority {
+	font-size: 0.7em;
+	font-weight: 600;
+}
+
+.is-completed {
+	font-size: 0.75em;
+	color: rgb(35, 138, 15);
+	margin-top: 15px;
+}
+
+.task-field-set {
+	padding: 10px 10px 25px 10px;
+	margin: 25px 0;
+	min-width: 630px;
+}
+
+.del-btn {
+	border-radius: 50%;
+	font-weight: 600;
+	padding: 4px 10px;
+	color: rgb(179, 84, 84)
+}
+
+.error {
+	margin-top: 30px;
+	color: red;
+	font-weight: 600;
+	font-size: 00.8em;
+}
+
+.legend {
+	font-size: 0.9em;
+	font-weight: 600;
+	color: rgb(134, 134, 134);
+}
+
+.form-label {
+	margin: 0 7px;
+  font-size: 0.8em;
+	font-weight: 600;
+	color: rgb(73, 73, 73)
+}
+
+.form-field {
+	margin: 15px 40px 10px 15px;
+	flex-grow: 1;
+}
+
+.inline {
+	display: flex;
+	justify-content: space-between;
+}
+
+.form-task-description {
+	width: 45%;
+	padding: 5px;
+}
+
+.completed {
+	display: flex;
+	align-items: center;
+}
