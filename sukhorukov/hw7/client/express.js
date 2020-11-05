@@ -6,9 +6,6 @@ const methodOverride = require('method-override')
 const fetch = require('node-fetch')
 const LocalStorage = require('node-localstorage').LocalStorage, localStorage = new LocalStorage('./localStore')
 
-const taskModel = require('./models/task')
-const userModel = require('./models/user')
-
 const app = express()
 
 //посредники разные
@@ -94,7 +91,7 @@ app.get('/auth', (req, res) => {
   res.render('auth', { error, header })
 })
 
-//проверка пользователя на соответствие в базе данных
+//авторизация
 app.post('/auth', async (req, res) => {
   const response = await fetch('http://localhost:4000/auth', {
     method: 'POST',
@@ -110,13 +107,13 @@ app.post('/auth', async (req, res) => {
 })
 
 
-//сброс результатов проверки существования пользователя в базе данных
+//logout
 app.get('/logout', (req, res) => {
   localStorage.removeItem('registeredUser')
   res.redirect('/auth')
 })
 
-//запросить список задач
+//запрос списка задач
 app.get('/tasks', async (req, res) => {
   const registeredUser = JSON.parse(localStorage.getItem('registeredUser'))
 
@@ -151,7 +148,7 @@ app.get('/tasks', async (req, res) => {
   } 
 })
 
-//отображение формы для запроса данных на создания задачи
+//отображение формы создания задачи
 app.get('/task', async (req, res) => {
   const header = {
     title: 'Новая задача!',
@@ -166,15 +163,14 @@ app.get('/task', async (req, res) => {
   res.render('task', { header })
 })
 
-//создание новой задачи в базе данных
+//запрос на создание новой задачи
 app.post('/task', async (req, res) => {
   const registeredUser = JSON.parse(localStorage.getItem('registeredUser'))
 
   if (registeredUser) {
     let { body } = req
     if (body.completed) body.completed = true
-    const task = new taskModel(body)
-    task.userId = registeredUser._id
+    body.userId = registeredUser._id
 
     const headers = {
       'Content-type': 'application/json',
@@ -183,7 +179,7 @@ app.post('/task', async (req, res) => {
     
     const response = await fetch('http://localhost:4000/tasks', {
       method: 'POST',
-      body: JSON.stringify(task),
+      body: JSON.stringify(body),
       headers 
     })
 
@@ -195,7 +191,7 @@ app.post('/task', async (req, res) => {
   res.redirect('/tasks')
 })
 
-//отображение формы для запроса данных на изменение задачи
+//отображение формы изменение задачи
 app.get('/task/:id', async (req, res) => {
   const registeredUser = JSON.parse(localStorage.getItem('registeredUser'))
   const { id } = req.params
@@ -221,7 +217,7 @@ app.get('/task/:id', async (req, res) => {
   res.render('task', { header, task })
 })
 
-//изменение задачи
+//запрос на изменение задачи
 app.patch('/task/:id', async (req, res) => {
   const registeredUser = JSON.parse(localStorage.getItem('registeredUser'))
 
@@ -248,7 +244,7 @@ app.patch('/task/:id', async (req, res) => {
   res.redirect('/tasks')
 })
 
-//удаление задачи из базы данных
+//запрос на удаление задачи
 app.delete('/task/:id', async (req, res) => {
   const registeredUser = JSON.parse(localStorage.getItem('registeredUser'))
 
