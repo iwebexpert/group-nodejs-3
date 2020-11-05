@@ -1,0 +1,22 @@
+<nav class="blue darken-4">
+  <div class="nav-wrapper">
+    <a href="/" class="brand-logo">Задачи</a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+      {{#if isIndex}}
+      <li class="active"><a href="/">Задачи</a></li>
+      {{else}}
+      <li><a href="/">Задачи</a></li>
+      {{/if}}
+
+      {{#if isCreate}}
+      <li class="active"><a href="/create">Создать</a></li>
+      {{else}}
+      <li><a href="/create">Создать</a></li>
+      {{/if}}
+
+        <li><a href="/logout">Выйти</a></li>
+
+    </ul>
+  </div>
+</nav>
