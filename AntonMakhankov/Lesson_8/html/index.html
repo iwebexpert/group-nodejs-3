@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="logout"><button id="logout">Выйти</button></div>
+        <div class="chat-wrapper">
+            <div class="overlay-container">
+                <div class="top-overlay"></div>
+                <div class="bottom-overlay"></div>
+            </div>
+            <div class="chat-container" id="chat-container">
+                <ul id="chat"></ul>
+            </div>
+        </div>
+        <div class="form-container">
+            <form id="message-send">
+                <input type="text" placeholder="Сообщение" id="message">
+                <button type="submit" id="btn-create">
+                    <svg aria-hidden="true" focusable="false" data-prefix="fad" data-icon="comment-dots" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-comment-dots fa-w-16 fa-3x">
+                        <g class="fa-group">
+                            <path fill="#26a0da" d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5a8 8 0 0 0-1.5 8.7A7.83 7.83 0 0 0 8 480c66.3 0 116-31.8 140.6-51.4A305 305 0 0 0 256 448c141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm128 0a32 32 0 1 1 32-32 32 32 0 0 1-32 32zm128 0a32 32 0 1 1 32-32 32 32 0 0 1-32 32z" class="fa-secondary"></path>
+                            <path fill="#314755" d="M128 208a32 32 0 1 0 32 32 32 32 0 0 0-32-32zm128 0a32 32 0 1 0 32 32 32 32 0 0 0-32-32zm128 0a32 32 0 1 0 32 32 32 32 0 0 0-32-32z" class="fa-primary"></path>
+                        </g>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+        moment.locale('ru');
+
+        const logout        = document.querySelector('#logout');
+
+        logout.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location = '/auth';
+        })
+
+        window.addEventListener('load', () => {
+            const chat          = document.querySelector('#chat');
+            const chatContainer = document.querySelector('#chat-container');
+            const messageForm   = document.querySelector('#message-send');
+            const btnCreate     = document.querySelector('#btn-create');
+            const msgInput      = document.querySelector('#message');
+
+            const token         = localStorage.getItem('token');
+            const curUser       = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): null;
+
+            if(!token){
+                window.location = '/auth';
+                return;
+            }
+
+            const socket = io.connect(`https://tbme.ru/?token=${token}`);
+
+            socket.on('created', (message,user) => {
+                const li = document.createElement('li');
+
+                const messageHeader     = document.createElement('div');
+                const messageBody       = document.createElement('div');
+                const messageFooter     = document.createElement('div');
+                const messageName       = document.createElement('div');
+                const messageTime       = document.createElement('div');
+                const messageText       = document.createElement('div');
+                const messageContainer  = document.createElement('div');
+
+                li.dataset.id = message._id;
+
+                
+                messageName.innerText = user.name;
+                messageTime.innerText = moment(message.time).format("hh:mm");
+                messageText.innerText = message.text;
+
+                messageHeader.appendChild(messageName);
+                messageBody.appendChild(messageText);
+                messageFooter.appendChild(messageTime);
+
+                var ownerClass = "someoneMessage";
+
+                if(curUser._id === user._id) {
+                    ownerClass = "ownerMessage";
+                }
+
+                messageContainer.appendChild(messageHeader)
+                messageContainer.appendChild(messageBody)
+                messageContainer.appendChild(messageFooter)
+
+                li.appendChild(messageContainer);
+
+                li.classList.add(ownerClass);
+                messageContainer.classList.add("message-container");
+                messageHeader.classList.add("message-header");
+                messageBody.classList.add("message-body");
+                messageFooter.classList.add("message-footer");
+
+                chat.appendChild(li);
+
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+
+            messageForm.addEventListener("submit", function(e){
+                    socket.emit('create', {
+                        text: msgInput.value,
+                        user: curUser,
+                    });
+                    msgInput.value = "";
+                    e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Auth</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="app-signup-container">
+        <div class="form-container">
+            <label for="phone">Телефон
+                <input type="text" name="phone" placeholder="79112223344" id="phone">
+            </label>
+            <label for="password">
+                Пароль
+                <input type="password" name="password" id="password">
+            </label>
+            <button type="button" id="btn-send">Войти</button>
+            <a href="/signup">У меня нет аккаунта</a>
+        </div>
+    </div>
+
+    <script>
+        const phone = document.querySelector('#phone');
+        const password = document.querySelector('#password');
+        const btnSend = document.querySelector('#btn-send');
+
+        btnSend.addEventListener('click', (event) => {
+            localStorage.removeItem('token');
+            
+            event.preventDefault();
+            fetch('/auth', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phone: phone.value,
+                    password: password.value,
+                }),
+            })
+            .then((response) => {
+                if(response.status !== 200){
+                    //Подсветка поля
+                    return {token: null};
+                }
+
+                return response.json();
+            })
+            .then((response) => {
+                if(response.token){
+                    const {token, ...user} = response;
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('user', JSON.stringify(user));
+
+                    window.location = '/';
+                }
+            })
+        })
+    </script>
+</body>
+</html>
