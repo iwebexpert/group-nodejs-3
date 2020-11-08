@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat SignUp</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="app-signup-container">
+        <div class="form-container">
+            <label for="phone">Телефон
+                <input type="text" name="phone" placeholder="79112223344" id="phone">
+            </label>
+            <label for="name">
+                Имя
+                <input type="text" name="name" id="name">
+            </label>
+            <label for="password">
+                Пароль
+                <input type="password" name="password" id="password">
+            </label>
+            <label for="password">
+                Павторите пароль
+                <input type="password" name="repassword" id="repassword">
+            </label>
+            <button type="button" id="btn-send">Зарегистрироваться</button>
+            <a href="/auth">У меня уже есть аккаунт</a>
+        </div>
+    </div>
+
+    <script>
+        const phone = document.querySelector('#phone');
+        const name = document.querySelector('#name');
+        const password = document.querySelector('#password');
+        const repassword = document.querySelector('#repassword');
+        const btnSend = document.querySelector('#btn-send');
+
+        btnSend.addEventListener('click', (event) => {
+            localStorage.removeItem('token');
+            
+            event.preventDefault();
+            fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phone: phone.value,
+                    name: name.value,
+                    password: password.value,
+                    repassword: repassword.value,
+                }),
+            })
+            .then((response) => {
+                console.log(response);
+                if(response.status !== 201){
+                    return {token: null};
+                }
+                window.location = '/auth';
+            })
+        })
+    </script>
+</body>
+</html>
