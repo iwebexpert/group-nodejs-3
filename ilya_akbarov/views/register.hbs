@@ -1,13 +1,12 @@
-<h1>Регистрация</h1>
-
-<form method="POST" action="/user/register">
-  <input type="email" name="email" placeholder="Email">
-  <input type="taxt" name="username" placeholder="Username">
-  <input type="password" name="password" placeholder="Password">
-  <input type="password" name="confirmPassword" placeholder="Confirm password">
-  <input type="submit" value="Зарегестрироваться">
+<h2>Регистрация</h2>
+<form method="POST" action="/register">
+    <input type="text" name="email" placeholder="Email"><br>
+    <input type="text" name="firstName" placeholder="Имя пользователя"><br>
+    <input type="password" name="password" placeholder="Password"><br>
+    <input type="password" name="repassword" placeholder="Repeat password"><br>
+    <input type="submit" value="Зарегистрироваться">
 </form>
+
 <div>
-  <h1>Войти</h1>
-  <a href="/user/auth">Войти</a>
+    <a href="/auth">У меня уже есть аккаунт</a>
 </div>

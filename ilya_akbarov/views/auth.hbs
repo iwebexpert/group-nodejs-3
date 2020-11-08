@@ -1,15 +1,14 @@
-{{#if error }}
-  <strong>Не правильный логин или пароль</strong>
+<h2>Авторизация</h2>
+
+{{#if error}}
+<b>Неправильная пара логин/пароль</b>
 {{/if}}
 
-<h1>Вход</h1>
-
-<form method="POST" action="/user/auth">
-  <input type="email" name="email" placeholder="Email">
-  <input type="password" name="password" placeholder="Password">
-  <input type="submit" value="Войти">
+<form method="POST" action="/auth">
+    <input type="text" name="email" placeholder="Email"><br>
+    <input type="password" name="password" placeholder="Password"><br>
+    <input type="submit" value="Войти">
 </form>
-
 <div>
-  <a href="/user/register">Зарегестрироваться</a>
+    <a href="/register">Зарегистрироваться</a>
 </div>
