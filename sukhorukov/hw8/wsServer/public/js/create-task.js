@@ -14,7 +14,7 @@ window.addEventListener('load', () => {
       const data = {}
       data.title = title.value
       data.description = description.value
-      data.completed = completed.value
+      data.completed = completed.checked
       data.userId =  registeredUser._id
 
       socket.emit('create',  data)
