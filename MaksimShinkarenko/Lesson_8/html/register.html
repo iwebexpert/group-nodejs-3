@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<nav>
+    <a href="/auth">Авторизация</a>
+</nav>
+<input type="text" name="email" placeholder="Email" id="email"><br>
+<input type="password" name="password" placeholder="Password" id="password"><br>
+<input type="password" name="repassword" placeholder="Password" id="repassword"><br>
+<input type="button" value="Зарегистрироваться" id="btn-send">
+
+<script>
+  const email = document.querySelector('#email');
+  const password = document.querySelector('#password');
+  const repassword = document.querySelector('#repassword');
+  const btnSend = document.querySelector('#btn-send');
+
+  btnSend.addEventListener('click', (event) => {
+    localStorage.removeItem('token');
+
+    event.preventDefault();
+    fetch('/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+        repassword: repassword.value,
+      }),
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          //Подсветка поля
+          return;
+        }
+        window.location = '/auth';
+      })
+  })
+</script>
+</body>
+</html>
