@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+    <h2 class="header"></h2>
+    <input type="text" value="" class="newTask">
+    <input type="button" id="btn-create" value="Добавить">
+    <br>
+    <div class='listItem'></div>
+    <script>
+        window.addEventListener('load', ()=> {
+            const list = document.querySelector('.listItem');
+            const btnCreate = document.querySelector('#btn-create');
+            
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+            document.querySelector('.header').textContent = `Приветствую, ${user.firstName}! Ваш список задач:`;
+
+            if (!token) {
+                window.location('/auth');
+                return;
+            }
+
+            const socket = io.connect(`http://localhost:4000?token=${token}`);
+
+            socket.on('created', (task)=> {
+                console.log('Event from server  - created', task)
+
+                AddTask(task);
+            })
+            
+            // слушатель команды от сервера на измнение статуса задачи 
+            socket.on('toggled', (taskID)=> {
+                console.log('Event from server  - toggled', taskID)
+                const button = document.querySelector(`[data-id="${taskID}"] ~ .btnStatus`);
+                button.textContent = button.textContent==='Готово' ? 'Выполнить' : 'Готово';
+            })
+
+            // слушатель команды от сервера на изменение названия задачи
+            socket.on('edited', (data)=> {
+                console.log('Event from server  - edited')
+                document.querySelector(`[data-id="${data.id}"]`);
+                
+            })
+
+            // слушатель команды от сервера на удаление задачи
+            socket.on('deleted', (taskID)=> {
+                console.log('Event from server  - deleted', taskID)
+                document.querySelectorAll(`[data-id="${taskID}"]`).forEach(task => {
+                    task.remove();
+                });
+            })
+
+            // действия по добавлению задачи
+            btnCreate.addEventListener('click', (event)=> {
+                const newTask = document.querySelector('.newTask').value;
+                if (newTask) {
+                    socket.emit('create', {
+                        title: newTask,
+                        user: JSON.parse(localStorage.getItem('user'))._id,
+                    });
+                    event.preventDefault();
+                }
+            })
+
+
+            
+            list.addEventListener('click', (event)=> {
+
+                const targetElem = event.target;
+                // изменяем статус задачи
+                if (targetElem.className == 'btnStatus') {
+                    const taskID = targetElem.dataset.id;
+                    socket.emit('toggle', taskID);
+                }
+
+                //редактируем задачу
+                if (targetElem.className == 'btnEdit') {
+                    const data = {id: targetElem.dataset.id};
+                    const title = document.querySelector(`[data-id="${data.id}"]`).value;
+                    if (title) data.title = title;
+                    socket.emit('edit', data);
+                }
+
+                // удаляем задачу
+
+                if (targetElem.className == 'btnDelete') {
+                    const taskID = targetElem.dataset.id;
+                    socket.emit('delete', taskID);
+                }
+               
+                event.preventDefault();
+            })
+
+            
+
+            //Получение текущих задач
+            fetch ('/tasks', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+                .then((response)=>{
+                    if (response.status !=200) {
+                        localStorage.removeItem('token');
+                        window.location = '/auth';
+                        return;
+                    }
+
+                    return response.json();
+                })
+                .then ((tasks) => {
+                    tasks.forEach(task => {
+                        AddTask(task);
+                    });
+                });
+
+                function AddTask(task) {
+                    const li = document.createElement('input');
+                    li.dataset.id = task._id;
+                    li.type = 'text';
+                    li.value = task.title;
+
+                    const button = document.createElement('button');
+                    button.textContent = task.completed ? 'Готово' : 'Выполнить';
+                    button.className = 'btnStatus';
+                    button.dataset.id = task._id;
+                    
+                    const buttonDel = document.createElement('button');
+                    buttonDel.textContent = "Удалить";
+                    buttonDel.className = 'btnDelete';
+                    buttonDel.dataset.id = task._id;
+
+                    const buttonEdit = document.createElement('button');
+                    buttonEdit.textContent = "Изменить";
+                    buttonEdit.className = 'btnEdit';
+                    buttonEdit.dataset.id = task._id;
+
+                    const br = document.createElement('br');
+                    br.dataset.id = task._id;
+
+                    list.appendChild(li);
+                    list.appendChild(buttonEdit);
+                    list.appendChild(buttonDel);
+                    list.appendChild(button);
+                    list.appendChild(br);
+                }
+        })
+    </script>
+</body>
+</html>
