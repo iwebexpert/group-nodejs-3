@@ -1,13 +1,14 @@
 <div>
-  <h2>name: {{{ user.name}}}</h2>
-  {{#if user.age}}
-    <h2>age: {{{ user.age}}}</h2>
-  {{/if}}
-  <ol>
-    {{#each user.skills}}
-      <li>{{this}}</li>
-    {{/each}}
-  </ol>
-  <hr>
-  <a href="/users">пользователи</a>
+    <h2>{{user.username}}</h2>
+
+    {{#if user.age}}
+        <div>Возраст: {{user.age}}</div>
+    {{/if}}
+
+    <ol>
+        {{#each user.skills}}
+            <li>{{this}}</li>
+        {{/each}}
+    </ol>
+    <a href="/users">Все пользователи</a>
 </div>

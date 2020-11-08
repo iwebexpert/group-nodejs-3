@@ -1,8 +1,8 @@
 <div>
-  <h1>USERS</h1>
-  <ul>
-    {{#each users }}
-      <li><a href="/users/{{@key}}">{{this.name}}</a></li>
-    {{/each}}
-  </ul>
+    <h2>Users!</h2>
+    <ul>
+        {{#each users}}
+        <li><a href="/users/{{@key}}">{{this.username}}</a></li>
+        {{/each}}
+    </ul>
 </div>

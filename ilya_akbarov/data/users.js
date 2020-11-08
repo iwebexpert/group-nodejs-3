@@ -1,11 +1,18 @@
-module.exports = [
-  {
-    name: 'Vasya',
-    age: 26,
-    skills: ['JS', 'React.js'],
-  },
-  {
-    name: 'Patya',
-    skills: ['JS', 'React.js', 'Node.js'],
-  },
-]
+module.exports = {
+    anna: {
+        username: 'Anna',
+        age: 25,
+        skills: [
+            'JS',
+            'React.js',
+        ],
+    },
+    ivan: {
+        username: 'Ivan',
+        skills: [
+            'JS',
+            'Node.js',
+            'React.js',
+        ],
+    },
+};
