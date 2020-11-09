@@ -1,0 +1,147 @@
+<div id="tasks">
+  <button type="button" class="mb-4 btn btn-primary btn-short" data-toggle="modal" data-target="#addTaskModal" @click="modalClean">
+    +
+  </button>
+
+  <div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div>
+          <div class="modal-header">
+            <h5 class="modal-title">New Task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <b v-if="modalFailed" class="text-danger">Wrong information<br></b>
+            <input class="form-control" placeholder="Title" v-model="title">
+            <div class="d-flex mt-2 flex-row align-items-center">
+              Type
+              <select class="ml-2 custom-select" v-model="type">
+                <option value="1">Home</option>
+                <option value="2">Work</option>
+                <option value="3">Study</option>
+              </select>
+            </div>
+            <div class="d-flex mt-2 flex-row align-items-center">
+              Is active <input type="checkbox" class="ml-2" v-model="isActive">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button v-if="!updateId" class="btn btn-primary" @click="add">Ok</button>
+            <button v-else class="btn btn-primary" @click="add">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div v-for="task in tasks" :key="task._id" :class="getClass(task)" role="alert">
+    <span v-text="task.title"></span>
+    <div class="d-flex flex-row align-items-center">
+      <span v-text="getTypeText(task)"></span>
+      <button class="mr-2 ml-2 btn btn-primary btn-short" data-toggle="modal" data-target="#addTaskModal" @click="setUpdateData(task)">
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+          <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+        </svg>
+      </button>
+      <button class="btn btn-primary btn-short" @click="del(task)">
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const TASK_TYPES_CLASSES = {
+      1: 'alert-primary',
+      2: 'alert-success',
+      3: 'alert-warning'
+    }
+    const TASK_TYPE_CLASS_NOT_ACTIVE = 'alert-light'
+
+    const TASK_TYPES_NAMES = {
+      1: 'Home',
+      2: 'Work',
+      3: 'Study'
+    }
+
+    new Vue({
+      el: "#tasks",
+      data: {
+        TASK_TYPES_NAMES,
+        title: '',
+        type: 1,
+        isActive: false,
+        token: null,
+        user: null,
+        socket: null,
+        tasks: [],
+        modalFailed: false,
+        updateId: null,
+      },
+      async mounted() {
+        this.token = localStorage.getItem('token');
+        this.user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')): null;
+
+        if(!this.token){
+            window.location = '/auth';
+            return;
+        }
+
+        this.socket = io(`http://127.0.0.1:4000?token=${this.token}`);
+
+        this.socket.on('tasks', (tasks) => {
+          console.log('tasks', tasks);
+          this.tasks = tasks;
+        });
+
+        this.socket.emit('tasks');
+      },
+      methods: {
+        modalClean() {
+          this.title = '';
+          this.type = 1;
+          this.isActive = false;
+          this.updateId = null;
+        },
+        add() {
+          if (!this.title) {
+            this.modalFailed = true;
+          } else {
+            this.socket.emit(this.updateId ? 'update' : 'add', {
+              title: this.title,
+              type: this.type,
+              isActive: this.isActive,
+              _id: this.updateId,
+            });
+
+            $('#addTaskModal').modal('hide');
+          }
+        },
+        del(task) {
+          this.socket.emit('delete', {
+            _id: task._id
+          });
+        },
+        setUpdateData(task) {
+          this.title = task.title;
+          this.type = task.type;
+          this.isActive = task.isActive;
+          this.updateId = task._id;
+        },
+        getTypeText(task) {
+          return `${TASK_TYPES_NAMES[task.type]}${task.isActive ? '' : ' [NOT ACTIVE TASK]'}`;
+        },
+        getClass(task) {
+          const clazz = task.isActive ? TASK_TYPES_CLASSES[task.type]: TASK_TYPE_CLASS_NOT_ACTIVE
+          return `alert ${clazz} d-flex justify-content-between align-items-center`;
+        }
+      },
+    })
+  </script>
+</div>
