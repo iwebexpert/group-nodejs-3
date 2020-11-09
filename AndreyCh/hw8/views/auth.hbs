@@ -1,0 +1,58 @@
+<h2>Авторизация</h2>
+
+<div id="auth">
+
+  <b v-if="error" class="text-danger">Неправильная пара логин/пароль<br></b>
+
+  <input type="text" placeholder="Email" class="my-1" v-model="email"><br>
+  <input type="password" placeholder="Password" class="my-1" v-model="password"><br>
+  <input type="button" value="Войти" class="btn btn-primary mt-2" @click="login">
+</div>
+
+<div class="mt-3">
+    <a href="/register">Зарегистрироваться</a>
+</div>
+
+<script>
+  new Vue({
+    el: '#auth',
+    data: {
+      email: '',
+      password: '',
+      error: false,
+    },
+    methods: {
+      login() {
+        localStorage.removeItem('token');
+
+        fetch('/auth', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: this.email,
+                password: this.password,
+            }),
+        })
+        .then((response) => {
+            if(response.status !== 200){
+                this.error = true;
+                return {token: null};
+            }
+
+            return response.json();
+        })
+        .then((response) => {
+            if(response.token){
+                const {token, ...user} = response;
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+
+                window.location = '/';
+            }
+        })
+      },
+    },
+  })
+</script>

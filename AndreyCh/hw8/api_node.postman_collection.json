@@ -1,0 +1,147 @@
+{
+	"variables": [],
+	"info": {
+		"name": "api_node",
+		"_postman_id": "d833de02-e044-f305-a929-a5cbf2ac0a32",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create user",
+			"request": {
+				"url": "http://localhost:4000/register",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"q@q.com\",\n\t\"firstName\": \"Andrey\",\n\t\"password\": \"123\",\n\t\"role\": \"admin\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setEnvironmentVariable(\"token\", jsonData.token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:4000/auth",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"q@q.com\",\n\t\"password\": \"123\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "get tasks",
+			"request": {
+				"url": "http://localhost:4000/tasks",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "delete task",
+			"request": {
+				"url": "http://localhost:4000/task/5f9a85e11f48c646ec4bb81f",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "create task",
+			"request": {
+				"url": "http://localhost:4000/task",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"title\": \"Task 123\",\r\n\t\"isActive\": true,\r\n\t\"type\": 1,\r\n\t\"completed\": true\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "update task",
+			"request": {
+				"url": "http://localhost:4000/task/5f9a86031f48c646ec4bb820",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_id\": \"5f9a86031f48c646ec4bb820\",\n    \"isActive\": true,\n    \"completed\": false,\n    \"title\": \"2341111\",\n    \"type\": 1,\n    \"__v\": 0\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
