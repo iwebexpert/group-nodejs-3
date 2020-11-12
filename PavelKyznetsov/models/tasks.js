@@ -11,13 +11,9 @@ const TaskSchema = new Schema({
     type: String,
     default: "Нет описания"
   },
-  status: {
-    type: Number,
-    default: 1,
-  },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+  completed: {
+    type: Boolean,
+    default: false,
   },
 })
 
