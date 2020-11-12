@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <style>
+        li {
+            width: 400px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <ul id="list"></ul>
+    <input type="button" id="btn-create" value="Создать задачу">
+
+    <script>
+        window.addEventListener('load', () => {
+            const list = document.querySelector('#list');
+            const btn = document.querySelector('#btn-create');
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+            if(!token){
+                window.location = '/auth';
+                return;
+            }
+
+            const socket = io.connect(`http://localhost:3000?token=${token}`);
+
+            socket.on('created', (task) => {
+                console.log('Event from server - created', task);
+                const li = document.createElement('li');
+                    const button = document.createElement('button');
+                    button.textContent = task.complited ? 'Вернуть' : 'Выполнить';
+                    const del = document.createElement('div');
+                    del.textContent = 'delete';
+                    li.dataset.id = task._id;
+                    li.textContent = task.title;
+                    li.appendChild(button);
+                    li.appendChild(del);
+                    list.appendChild(li);
+            });
+            socket.on('toggled', (taskId) => {
+                console.log('Event from server - toggled', taskId);
+                const but = document.querySelector(`[data-id="${taskId}"] > button`);
+                but.textContent = but.textContent === 'Вернуть' ? 'Выполнить' : 'Вернуть';
+            });
+
+            socket.on('deleted', (taskId) => {
+                console.log('Event from server - deleted', taskId);
+                const taskLi = document.querySelector(`li[data-id="${taskId}"]`);
+                list.removeChild(taskLi);
+            });
+
+            btn.addEventListener('click', (event) => {
+                event.preventDefault();
+                socket.emit('create', {
+                    title: prompt('Введите задачи', 'New task'),
+                });
+            });
+
+            list.addEventListener('click', (event) => {
+                event.preventDefault();
+                if(event.target.tagName === 'BUTTON'){
+                    const li = event.target.parentElement;
+                    const taskId = li.dataset.id;
+                    socket.emit('toggle', taskId);
+                }
+                if(event.target.tagName === 'DIV'){
+                    const li = event.target.parentElement;
+                    const taskId = li.dataset.id;
+                    socket.emit('delete', taskId);
+                }
+            });
+
+            //GET TASKS
+            fetch('/tasks', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            })
+            .then((response) => {
+                if(response.status !== 200){
+                    localStorage.removeItem('token');
+                    window.location = '/auth';
+                    return null;
+                }
+                return response.json();
+            })
+            .then((tasks) => {
+                tasks.forEach((task) => {
+                    const li = document.createElement('li');
+                    const button = document.createElement('button');
+                    const del = document.createElement('div');
+                    del.textContent = 'delete';
+                    button.textContent = task.complited ? 'Вернуть' : 'Выполнить';
+                    li.dataset.id = task._id;
+                    li.textContent = task.title;
+                    li.appendChild(button);
+                    li.appendChild(del);
+                    list.appendChild(li);
+                })
+            });
+        });
+    </script>
+</body>
+</html>

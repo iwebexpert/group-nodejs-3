@@ -5,6 +5,8 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 const cors = require('cors')
 const jwt = require('jsonwebtoken')
+const http = require('http')
+const socketIO = require('socket.io')
 
 const TOKEN_SECRET_KEY = 'adfafasf234fradfa235raf23fa35a699fas29rad'
 
@@ -13,6 +15,70 @@ const userModel = require('./Model/User')
 const passport = require('./auth')
 
 const app = express()
+
+const server = http.Server(app)
+const io = socketIO(server)
+
+io.use((socket, next) => {
+    const token = socket.handshake.query.token
+
+    jwt.verify(token, TOKEN_SECRET_KEY, (err) => {
+        if(err){
+            return next(new Error('Authorization error'))
+        }
+
+        next()
+    })
+
+    return next(new Error('Authorization error'))
+})
+
+io.on('connection', (socket) => {
+    console.log('New connection')
+
+    //Обмен событиями
+    socket.on('create', async (data) => {
+        console.log('Event from client - create')
+        const {title} = data
+        if(title){
+            const task = new taskModel({title})
+            const savedTask = await task.save()
+            
+            socket.broadcast.emit('created', savedTask)
+            socket.emit('created', savedTask) //Для пользователя, который отправил событие create
+        } 
+    })
+
+    socket.on('toggle', async (taskId) => {
+        console.log('Event from client - toggle')
+
+        const task = await taskModel.findById(taskId)
+        console.log(task);
+        if(task){
+            await taskModel.updateOne({_id: taskId}, {$set: {completed: !task.completed}})
+            socket.broadcast.emit('toggled', taskId)
+            socket.emit('toggled', taskId) //Для пользователя, который отправил событие create
+            console.log('toggle');
+        } 
+        console.log('non toggle');
+    })
+
+    socket.on('delete', async (taskId) => {
+    
+        await taskModel.findByIdAndDelete(taskId)
+
+        socket.broadcast.emit('deleted', taskId)
+        socket.emit('deleted', taskId)
+        
+        console.log('Event from client - delete')
+    })
+
+
+    socket.on('disconnect', () => {
+        console.log('New disconnect')
+    })
+})
+
 
 const mustBeAuthenticatedRestApi = (req, res, next) => {
     if(req.headers.authorization){
@@ -44,6 +110,13 @@ app.use(session({
 }))
 app.use(passport.initialize)
 app.use(passport.session)
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'index.html'))
+})
+app.get('/auth', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'auth.html'))
+})
 
 app.use('/tasks', mustBeAuthenticatedRestApi)
 
@@ -143,4 +216,4 @@ app.get('*', (req, res) => {
     res.status(404).render('error')
 })
 
-app.listen(3000)
+server.listen(3000)
